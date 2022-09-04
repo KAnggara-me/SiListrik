@@ -2,30 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\User;
+use Exception;
 
 class ApiController extends Controller
 {
-  public function status(Request $request)
+  public function apiStatus()
   {
-    $a = 'KitKat';
-    $token = $request->header('Authorization');
-    $token = str_replace('Bearer ', '', $token);
-    $url = $request->fullUrl();
-    $url = str_replace($request->url() . '?token=', '', $url);
-    $version = env('APP_VERSION');
-    $stability = env('APP_STABILITY');
-
-    if ($token == $a || ($url == $a)) {
-      return response()->json([
-        "message" => "WAPI - Unofficial WhatsApp API Gateway",
-        "version" => $version,
-        "stability" => $stability,
-      ], 200, [], JSON_NUMERIC_CHECK);
+    // Check token
+    $token = request()->input('token');
+    if (!isset($token)) {
+      $token = request()->bearerToken();
+    }
+    $user = User::where('token', $token)->first();
+    if (!$user) {
+      return response()->json(['message' => 'Invalid token'], 401, [], JSON_NUMERIC_CHECK);
     } else {
-      return response()->json([
-        'message' => 'Missing API token.',
-      ], 401);
+      try {
+        $reqParams = [
+          'token' => $user->apitoken,
+          'url' => 'https://api.kirimwa.id/v1'
+        ];
+        $response = apiKirimWaRequest($reqParams);
+        return response()->json(json_decode($response['body'], true), json_decode($response['statusCode'], true), [], JSON_NUMERIC_CHECK);
+      } catch (Exception $e) {
+        print_r($e);
+      }
     }
   }
 }

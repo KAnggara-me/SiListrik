@@ -8,4 +8,5 @@ Route::get('/', function () {
 });
 
 // API Status
-Route::get('/v1', [ApiController::class, 'status']);
+Route::get('/v1', [ApiController::class, 'apiStatus']);
+Route::post('/v1', [ApiController::class, 'apiStatus']);

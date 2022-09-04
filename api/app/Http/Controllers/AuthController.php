@@ -4,41 +4,51 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-
-  public function login(Request $request)
+  public function login()
   {
-    $request->validate([
+    return view('auth.login');
+  }
+
+  public function logout()
+  {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect('login');
+  }
+
+
+  /**
+   * Handle an authentication attempt.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Http\Response
+   */
+  public function authenticate(Request $request)
+  {
+
+    $credentials = $request->validate([
       'username' => 'required',
-      'password' => 'required|min:6',
+      'password' => 'required'
     ]);
 
-    $username = "namanama";
-    $pass = "aku";
-    $email = $request->input('username');
-    $password = $request->input('password');
-
-    if ($email == $username && $password == $pass) {
-      echo $email . " " . $password . " Login berhasil";
-    } else {
-      echo $email . " " . $password . " Login Gagal";
+    if (Auth::attempt($credentials)) {
+      $request->session()->regenerate();
+      return redirect()->intended('home');
     }
+
+    return back()->withErrors([
+      'email' => 'The provided credentials do not match our records.',
+    ])->onlyInput('email');
   }
 
   public function register(Request $request)
   {
-    function tokenGen($length = 10)
-    {
-      $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      $charactersLength = strlen($characters);
-      $randomString = '';
-      for ($i = 0; $i < $length; $i++) {
-        $randomString .= $characters[rand(0, $charactersLength - 1)];
-      }
-      return $randomString;
-    }
+
 
     $request->validate([
       'username' => 'required',
@@ -61,9 +71,14 @@ class AuthController extends Controller
         return redirect('/register')->with('error', 'Username sudah terdaftar');
       }
     } else {
-      return response()->json([
-        "messege" => "Unauthorized",
-      ], 401, [], JSON_NUMERIC_CHECK);
+      return response()->json(
+        [
+          'messege' => 'Unauthorized',
+        ],
+        401,
+        [],
+        JSON_NUMERIC_CHECK,
+      );
     }
   }
 }
