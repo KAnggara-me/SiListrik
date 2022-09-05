@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -30,26 +30,24 @@ class AuthController extends Controller
    */
   public function authenticate(Request $request)
   {
-
     $credentials = $request->validate([
       'username' => 'required',
-      'password' => 'required'
+      'password' => 'required|min:6',
     ]);
-
     if (Auth::attempt($credentials)) {
       $request->session()->regenerate();
-      return redirect()->intended('home');
+      // if (Auth::user()->status == 0) {
+      //   return redirect()->intended('home');
+      // } else {
+      //   return redirect()->intended('deviceadd');
+      // }
+      return redirect()->intended('deviceadd');
     }
-
-    return back()->withErrors([
-      'email' => 'The provided credentials do not match our records.',
-    ])->onlyInput('email');
+    return redirect('/login')->with('error', 'Wrong username or password.');
   }
 
   public function register(Request $request)
   {
-
-
     $request->validate([
       'username' => 'required',
       'password' => 'required|min:6',
@@ -80,5 +78,10 @@ class AuthController extends Controller
         JSON_NUMERIC_CHECK,
       );
     }
+  }
+
+  public function registerView()
+  {
+    return view('auth.register');
   }
 }

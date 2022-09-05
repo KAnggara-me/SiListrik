@@ -37,4 +37,12 @@ class HomeController extends Controller
       'active' => 'logs'
     ]);
   }
+
+  public function deviceadd(Request $request)
+  {
+    echo view('main.deviceadd', [
+      'title' => 'Add Device',
+      'active' => 'home'
+    ]);
+  }
 }
