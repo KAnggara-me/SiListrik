@@ -10,7 +10,6 @@
   <meta charset="utf-8">
   <title>Register | siListrik</title>
   <link rel="stylesheet" href="css/app.css">
-  @vite('resources/css/app.css')
 </head>
 
 <body class="body-bg min-h-screen px-2 pt-12 pb-6 md:px-0 md:pt-20" style="font-family:'Lato',sans-serif;">

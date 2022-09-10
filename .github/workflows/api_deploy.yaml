@@ -30,4 +30,4 @@ jobs:
           username: ${{ secrets.SOP_SSH_USERNAME }}
           password: ${{ secrets.SOP_SSH_PASSWORD }}
           port: ${{ secrets.SOP_SSH_PORT }}
-          script: ${{ secrets.COMPOSER }}
+          script: cd ${{ secrets.DIR }} && composer i
