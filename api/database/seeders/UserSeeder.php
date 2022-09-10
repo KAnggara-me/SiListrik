@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
     User::factory()->create([
       'username' => 'admina',
       'password' => bcrypt('admina'),
-      'token' => tokenGen(8),
+      'token' => 'KitKat',
       'apitoken' => 'y0xgWUtKbmOLYe_wcI^RFNK5imm8qC99V}OXodIti4RJpn{@-kelvin',
     ]);
     User::factory(10)->create();

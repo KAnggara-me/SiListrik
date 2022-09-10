@@ -9,6 +9,7 @@
   <meta charset="UTF-8">
   <meta charset="utf-8">
   <title>Register | siListrik</title>
+  <link rel="stylesheet" href="css/app.css">
   @vite('resources/css/app.css')
 </head>
 
@@ -42,8 +43,9 @@
         @error('password')
           <div class="text-pink-500">{{ $message }}</div>
         @enderror
-        <button class="mt-5 rounded bg-blue-500 py-2 font-bold text-black shadow-lg transition duration-200 hover:bg-blue-700 hover:shadow-xl" type="submit">Login</button>
+        <button class="mt-5 rounded bg-blue-500 py-2 font-bold text-black shadow-lg transition duration-200 hover:bg-blue-700 hover:shadow-xl" type="submit">Register</button>
       </form>
+      <a href="login" class="mt-2 text-center text-blue-500">login</a>
     </section>
   </main>
 </body>

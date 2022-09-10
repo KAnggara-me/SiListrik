@@ -21,7 +21,6 @@ class AuthController extends Controller
     return redirect('login');
   }
 
-
   /**
    * Handle an authentication attempt.
    *
@@ -36,12 +35,11 @@ class AuthController extends Controller
     ]);
     if (Auth::attempt($credentials)) {
       $request->session()->regenerate();
-      // if (Auth::user()->status == 0) {
-      //   return redirect()->intended('home');
-      // } else {
-      //   return redirect()->intended('deviceadd');
-      // }
-      return redirect()->intended('deviceadd');
+      if (Auth::user()->status == 0) {
+        return redirect()->intended('home');
+      } else {
+        return redirect()->intended('deviceadd');
+      }
     }
     return redirect('/login')->with('error', 'Wrong username or password.');
   }

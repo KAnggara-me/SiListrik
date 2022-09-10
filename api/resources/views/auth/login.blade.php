@@ -8,7 +8,8 @@
   <meta name="author" content="">
   <meta charset="UTF-8">
   <meta charset="utf-8">
-  <title>Register | siListrik</title>
+  <title>Login | siListrik</title>
+  <link rel="stylesheet" href="css/app.css">
   @vite('resources/css/app.css')
 </head>
 
@@ -30,9 +31,14 @@
           {{ session('success') }}
         </div>
       @endif
+      @if (session('error'))
+        <div class="text-center text-lg font-bold italic text-red-500">
+          {{ session('error') }}
+        </div>
+      @endif
       <form class="flex flex-col" method="POST" action="/login">
         @csrf
-        <input type="text" value="{{ old('username') }}" id="username" placeholder="Username" name="username" required @error('username') invalid @enderror
+        <input type="text" value="{{ old('username') }}" id="username" placeholder="Username" name="username" required @error('username') invalid @enderror autofocus
           class="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder-slate-400 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500" />
         @error('username')
           <div class="text-pink-500">{{ $message }}</div>
@@ -46,6 +52,9 @@
       </form>
     </section>
   </main>
+
+  <script src="js/app.js"></script>
+  @vite('resources/js/app.js')
 </body>
 
 </html>

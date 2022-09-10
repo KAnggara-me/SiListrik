@@ -25,7 +25,6 @@ class ApiController extends Controller
         'message' => 'Missing API token.'
       ], 401);
     }
-
     $user = User::where('token', $token)->first();
     if (!$user) {
       return response()->json(['message' => 'Invalid token'], 403, [], JSON_NUMERIC_CHECK);
@@ -45,7 +44,6 @@ class ApiController extends Controller
 
   public function qrCode()
   {
-    // Check token
     $token = request()->input('token');
     if (!isset($token)) {
       $token = request()->bearerToken();
@@ -55,21 +53,17 @@ class ApiController extends Controller
         'message' => 'Missing API token.'
       ], 401);
     }
-
     $user = User::where('token', $token)->first();
     if (!$user) {
       return response()->json(['message' => 'Invalid token'], 403, [], JSON_NUMERIC_CHECK);
     } else {
-      // Lihat apiKirimWaRequest() pada Contoh Integrasi diatas
       try {
-        $query = http_build_query(['device_id' => getenv('DEVICE_ID')]);
         $reqParams = [
-          'token' => getenv('API_TOKEN'),
-          'url' => sprintf('https://api.kirimwa.id/v1/qr?%s', $query)
+          'token' => $user->apitoken,
+          'url' => 'https://api.kirimwa.id/v1/qr?device_id=' . $user->username,
         ];
-
         $response = apiKirimWaRequest($reqParams);
-        echo $response['body'];
+        return response()->json(json_decode($response['body'], true), json_decode($response['statusCode'], true), [], JSON_NUMERIC_CHECK);
       } catch (Exception $e) {
         print_r($e);
       }
