@@ -23,6 +23,6 @@ Route::get('/v1/devices/{id}', [DeviceController::class, 'deviceId']);
 Route::post('/v1/devices/{id}', [DeviceController::class, 'deviceId']);
 Route::delete('/v1/devices/{id}', [DeviceController::class, 'deleteDevice']);
 
-// WebHook from API
+// WebHook from API 
 Route::post('/v1/webhooks', [WebhookController::class, 'index']);
 Route::delete('/v1/webhooks', [WebhookController::class, 'delete']);
