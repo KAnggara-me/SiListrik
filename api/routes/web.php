@@ -18,6 +18,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware(['auth'])-
 Route::get('/qr', [HomeController::class, 'qrCode']);
 Route::get('/status', [StatusController::class, 'status']);
 Route::get('/deviceadd', [HomeController::class, 'deviceadd'])->middleware(['auth']);
+
 Route::get('/logs', [HomeController::class, 'logs'])->middleware(['auth', 'connected']);
 
 Route::get('/notif', [HomeController::class, 'notif'])->middleware(['auth', 'connected']);
@@ -25,4 +26,5 @@ Route::get('/setting', [HomeController::class, 'setting'])->middleware(['auth', 
 
 // OK
 Route::get('/home', [HomeController::class, 'index'])->middleware(['auth', 'connected'])->name('home');
+
 Route::get('/connect', [HomeController::class, 'connect'])->middleware(['auth'])->name('connect');

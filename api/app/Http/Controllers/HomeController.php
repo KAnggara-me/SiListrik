@@ -46,29 +46,27 @@ class HomeController extends Controller
     ]);
   }
 
-
   public function connect()
   {
     $username = auth()->user()->username;
     $data = User::where('username', $username)->first();
-    if ($data->status === 1) {
-      return redirect()->route('home');
+
+    if ($data->status !== 1) {
+      try {
+        $reqParams = [
+          'token' => $data->apitoken,
+          'url' => 'https://api.kirimwa.id/v1/qr?device_id=' . $data->username,
+        ];
+        $response = apiKirimWaRequest($reqParams);
+        $res = json_decode($response['body'], true);
+      } catch (Exception $e) {
+        print_r($e);
+      }
+      return view('main.reconnect', ['title' => 'Scan QR', 'active' => '', 'qr' => $res['qr_code']]);
     }
 
-    try {
-      $reqParams = [
-        'token' => $data->apitoken,
-        'url' => 'https://api.kirimwa.id/v1/qr?device_id=' . $data->username,
-      ];
-      $response = apiKirimWaRequest($reqParams);
-      $res = json_decode($response['body'], true);
-    } catch (Exception $e) {
-      print_r($e);
-    }
-
-    return view('main.reconnect', ['title' => 'Scan QR', 'active' => '', 'qr' => $res['qr_code']]);
+    return redirect()->route('home');
   }
-
 
   public function qrCode()
   {
