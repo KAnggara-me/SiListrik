@@ -13,13 +13,8 @@ return new class extends Migration
    */
   public function up()
   {
-    Schema::create('bots', function (Blueprint $table) {
-      $table->id();
-      $table->string('device_id');
-      $table->foreign('device_id')->references('username')->on('users');
-      $table->string('description')->nullable();
-      $table->string('trigger');
-      $table->string('response');
+    Schema::create('botLogs', function (Blueprint $table) {
+      $table->string('id')->primary();
       $table->timestamps();
     });
   }
@@ -31,6 +26,6 @@ return new class extends Migration
    */
   public function down()
   {
-    Schema::dropIfExists('bots');
+    Schema::dropIfExists('botLogs');
   }
 };

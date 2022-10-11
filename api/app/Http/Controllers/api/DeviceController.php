@@ -129,4 +129,8 @@ class DeviceController extends Controller
 			}
 		}
 	}
+
+	public function connect()
+	{
+	}
 }

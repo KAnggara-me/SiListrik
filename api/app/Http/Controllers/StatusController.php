@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\User;
 
 class StatusController extends Controller
 {
-  public function index(Request $request)
+  public function status()
   {
-    echo view('home');
+    $username = request()->bearerToken();
+    $status = User::where('username', $username)->first();
+
+    if (isset($status)) {
+      $status = $status->status;
+      return response()->json(['status' => $status], 200, [], JSON_NUMERIC_CHECK);
+    } else {
+      return response()->json(['status' => 0], 200, [], JSON_NUMERIC_CHECK);
+    }
   }
 }

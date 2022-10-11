@@ -14,14 +14,13 @@ class UserSeeder extends Seeder
    */
   public function run()
   {
-    User::factory()->create([
+    User::create([
       'username' => 'admina',
       'password' => bcrypt('admina'),
       'token' => 'KitKat',
       'apitoken' => 'y0xgWUtKbmOLYe_wcI^RFNK5imm8qC99V}OXodIti4RJpn{@-kelvin',
     ]);
-
-    User::factory()->create([
+    User::create([
       'username' => 'zuhryy',
       'password' => bcrypt('zuhryy'),
       'token' => 'Lolipop',

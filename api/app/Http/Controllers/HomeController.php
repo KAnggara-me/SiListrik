@@ -46,16 +46,29 @@ class HomeController extends Controller
     ]);
   }
 
+
   public function connect()
   {
-    $show = true;
-    $qr = session()->get('qr');
-    if (!isset($qr)) {
-      $show = false;
-      return redirect('home');
+    $username = auth()->user()->username;
+    $data = User::where('username', $username)->first();
+    if ($data->status === 1) {
+      return redirect()->route('home');
     }
-    return view('main.reconnect', ['title' => 'Disconnected', 'active' => 'home', 'qr' => $qr, 'show' => $show]);
+
+    try {
+      $reqParams = [
+        'token' => $data->apitoken,
+        'url' => 'https://api.kirimwa.id/v1/qr?device_id=' . $data->username,
+      ];
+      $response = apiKirimWaRequest($reqParams);
+      $res = json_decode($response['body'], true);
+    } catch (Exception $e) {
+      print_r($e);
+    }
+
+    return view('main.reconnect', ['title' => 'Scan QR', 'active' => '', 'qr' => $res['qr_code']]);
   }
+
 
   public function qrCode()
   {
@@ -68,7 +81,9 @@ class HomeController extends Controller
         'message' => 'Missing API token.'
       ], 401);
     }
+
     $user = User::where('token', $token)->first();
+
     if (!$user) {
       return response()->json(['message' => 'Invalid token'], 403, [], JSON_NUMERIC_CHECK);
     } else {

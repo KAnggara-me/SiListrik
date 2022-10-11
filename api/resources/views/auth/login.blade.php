@@ -15,7 +15,7 @@
 <body class="body-bg min-h-screen px-2 pt-12 pb-6 md:px-0 md:pt-20" style="font-family:'Lato',sans-serif;">
   <header class="mx-auto max-w-lg">
     <a href="#">
-      <h1 class="text-center text-4xl font-bold text-white">StartUp</h1>
+      <h1 class="text-center text-4xl font-bold text-white">SiListrik</h1>
     </a>
   </header>
 
