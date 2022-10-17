@@ -2,45 +2,68 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SensorLog;
 use Exception;
 use App\Models\User;
-use Illuminate\Http\Request;
+use Spatie\Browsershot\Browsershot;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class HomeController extends Controller
 {
-  public function index(Request $request)
+  public function index()
   {
-    return view('main.home', ['title' => 'Home', 'active' => 'home']);
+    $sensor = SensorLog::orderBy('id', 'desc')->limit(25)->get();
+
+    $last = $sensor->first();
+
+    $daya = [];
+    $suhu = [];
+    $date = [];
+
+    foreach ($sensor as $s) {
+      $daya[] = ($s->voltase * $s->arus);
+      $suhu[] = $s->temperatur;
+      $date[] = $s->created_at->format('H:i') . ' WIB';
+    }
+
+
+    return view('main.home', [
+      'title' => 'Home',
+      'active' => 'home',
+      'suhu' => $suhu,
+      'last' => $last,
+      'daya' => $daya,
+      'date' => $date,
+    ]);
   }
 
-  public function setting(Request $request)
+  public function setting()
   {
-    echo view('main.setting', [
+    return view('main.setting', [
       'title' => 'Setting',
       'active' => 'setting'
     ]);
   }
 
-  public function notif(Request $request)
+  public function notif()
   {
-    echo view('main.notif', [
+    return view('main.notif', [
       'title' => 'Notification',
       'active' => 'notif'
     ]);
   }
 
-  public function logs(Request $request)
+  public function logs()
   {
-    echo view('main.logs', [
+    return view('main.logs', [
       'title' => 'Logs',
       'active' => 'logs'
     ]);
   }
 
-  public function deviceadd(Request $request)
+  public function deviceadd()
   {
-    echo view('main.deviceadd', [
+    return view('main.deviceadd', [
       'title' => 'Add Device',
       'active' => 'home'
     ]);
@@ -67,6 +90,7 @@ class HomeController extends Controller
 
     return redirect()->route('home');
   }
+
 
   public function qrCode()
   {

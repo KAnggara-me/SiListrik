@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-  public function login()
-  {
-    return view('auth.login');
-  }
-
   public function logout()
   {
     Auth::logout();
@@ -21,12 +16,6 @@ class AuthController extends Controller
     return redirect('login');
   }
 
-  /**
-   * Handle an authentication attempt.
-   *
-   * @param  \Illuminate\Http\Request  $request
-   * @return \Illuminate\Http\Response
-   */
   public function authenticate(Request $request)
   {
     $credentials = $request->validate([
@@ -35,11 +24,11 @@ class AuthController extends Controller
     ]);
     if (Auth::attempt($credentials)) {
       $request->session()->regenerate();
-      if (Auth::user()->status == 0) {
-        return redirect()->intended('home');
-      } else {
-        return redirect()->intended('deviceadd');
+      $user = User::where('username', $request->username)->first();
+      if ($user->status != 1) {
+        return redirect()->intended('connect');
       }
+      return redirect()->intended('home');
     }
     return redirect('/login')->with('error', 'Wrong username or password.');
   }
@@ -68,18 +57,11 @@ class AuthController extends Controller
       }
     } else {
       return response()->json(
-        [
-          'messege' => 'Unauthorized',
-        ],
+        ['messege' => 'Unauthorized'],
         401,
         [],
-        JSON_NUMERIC_CHECK,
+        JSON_NUMERIC_CHECK
       );
     }
-  }
-
-  public function registerView()
-  {
-    return view('auth.register');
   }
 }

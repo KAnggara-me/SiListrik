@@ -5,12 +5,14 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\StatusController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [AuthController::class, 'login'])->middleware('guest');
-Route::get('/login', [AuthController::class, 'login'])->middleware('guest')->name('login');
-
+Route::view('/', 'auth.login')->middleware('guest');
+Route::view('/login', 'auth.login')->middleware('guest')->name('login');
 Route::post('/login', [AuthController::class, 'authenticate']);
+
 Route::post('/register', [AuthController::class, 'register']);
-Route::get('/register', [AuthController::class, 'registerView'])->middleware('guest');
+Route::get('/register', function () {
+  return view('auth.register');
+})->middleware('guest');
 
 Route::get('/logout', [AuthController::class, 'logout'])->middleware(['auth',]);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware(['auth'])->name('logout');

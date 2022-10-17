@@ -6,6 +6,7 @@ use App\Models\Bot;
 use App\Models\User;
 use App\Models\Webhook;
 use App\Http\Controllers\Controller;
+use App\Models\DeviceLog;
 
 class WebhookController extends Controller
 {
@@ -22,6 +23,11 @@ class WebhookController extends Controller
 			} else {
 				User::where('username', $device_id)->update(['status' => 0]);
 			}
+
+			DeviceLog::create([
+				'device_id' => $device_id,
+				'status' => $status,
+			]);
 
 			return response()->json([
 				"type" => $type,
