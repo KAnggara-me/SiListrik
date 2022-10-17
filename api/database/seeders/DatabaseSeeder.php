@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\SensorLog;
 use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
 
@@ -18,6 +19,8 @@ class DatabaseSeeder extends Seeder
       UserSeeder::class,
       WebhookSeeder::class,
       BotSeeder::class,
+      SensorLogSeeder::class,
+      DeviceLogSeeder::class,
     ]);
   }
 }
