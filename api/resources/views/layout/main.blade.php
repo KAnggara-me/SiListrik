@@ -69,7 +69,7 @@
                     window.location.href = "home";
                 }
             }
-        }, 2000);
+        }, 10000);
     </script>
 </body>
 
