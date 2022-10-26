@@ -17,7 +17,7 @@ class SensorLogFactory extends Factory
     public function definition()
     {
         return [
-            'voltase' => $this->faker->randomFloat(2, 200, 230),
+            'voltase' => $this->faker->randomFloat(2, 200, 250),
             'arus' => $this->faker->randomFloat(2, 0, 10),
             'temperatur' => $this->faker->randomFloat(2, 25, 120),
             'kelembaban' => $this->faker->randomFloat(2, 10, 90),
