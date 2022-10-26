@@ -14,10 +14,10 @@ class IsConnect
     $status = User::select('status')->where('username',  $username)->first();
 
     // Check Status
-    if ($status['status'] !== 1) {
-      return redirect()->route('connect')->with(['username' => $username]);
-    } else {
+    if ($status['status'] == 1) {
       return $next($request);
+    } else {
+      return redirect()->route('connect')->with(['username' => $username]);
     }
   }
 }
