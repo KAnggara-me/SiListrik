@@ -47,7 +47,7 @@
         @error('password')
           <div class="text-pink-500">{{ $message }}</div>
         @enderror
-        <button class="mt-5 rounded bg-blue-500 py-2 font-bold text-black shadow-lg transition duration-200 hover:bg-blue-700 hover:shadow-xl" type="submit">Login</button>
+        <button class="mt-5 rounded bg-blue-500 py-2 font-bold text-white shadow-lg transition duration-200 hover:bg-blue-700 hover:shadow-xl" type="submit">Login</button>
       </form>
     </section>
   </main>

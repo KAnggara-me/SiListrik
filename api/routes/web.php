@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\StatusController;
-use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'auth.login')->middleware('guest');
 Route::view('/login', 'auth.login')->middleware('guest')->name('login');
@@ -23,8 +23,9 @@ Route::get('/deviceadd', [HomeController::class, 'deviceadd'])->middleware(['aut
 
 Route::get('/logs', [HomeController::class, 'logs'])->middleware(['auth', 'connected']);
 
-Route::get('/notif', [HomeController::class, 'notif'])->middleware(['auth', 'connected']);
 Route::get('/setting', [HomeController::class, 'setting'])->middleware(['auth', 'connected']);
+
+Route::get('/notif', [HomeController::class, 'notif'])->middleware(['auth', 'connected']);
 
 // OK
 Route::get('/home', [HomeController::class, 'index'])->middleware(['auth', 'connected'])->name('home');

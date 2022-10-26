@@ -3,7 +3,7 @@
   <section>
     <div id="main" class="main-content mt-12 flex-1 bg-gray-100 pb-24 md:mt-2 md:pb-5">
       <div class="bg-gray-800 pt-3">
-        <div class="rounded-tl-3xl bg-gradient-to-r from-blue-900 to-gray-800 p-4 text-2xl text-white shadow">
+        <div class="rounded-t-3xl bg-gradient-to-r from-blue-400 to-blue-900 p-4 text-2xl text-white shadow">
           <h1 class="pl-2 font-bold">Analytics</h1>
         </div>
       </div>
@@ -13,7 +13,6 @@
             <div class="flex flex-row items-center">
               <div class="flex-shrink pr-4">
                 <div class="rounded-full bg-blue-600 p-5">
-
                   <i class="fas fa-bolt fa-2x fa-inverse"></i>
                 </div>
               </div>
@@ -79,7 +78,7 @@
               <div class="flex-1 text-right md:text-center">
                 <h2 class="font-bold uppercase text-gray-600">Temperatur</h2>
                 <p class="text-2xl font-bold">
-                  <span class="font-normal italic"> {{ $last->temperatur }} C&deg; </span> |
+                  <span class="font-normal italic"> {{ number_format($last->temperatur) }} C&deg; </span> |
                   {{ $last->temperatur > 30 ? 'Suhu Tinggi' : 'Suhu Normal' }}
                 </p>
               </div>
@@ -129,28 +128,32 @@
         <div class="w-full p-6 md:w-1/2 xl:w-1/2">
           <!--Graph Card-->
           <div class="rounded-lg border-transparent bg-white shadow-xl">
-            <div class="rounded-tl-lg rounded-tr-lg border-b-2 border-gray-300 bg-gradient-to-b from-gray-300 to-gray-100 p-2 uppercase text-gray-800">
+            <div class="rounded-tl-lg rounded-tr-lg border-b-2 border-gray-300 bg-gradient-to-b from-blue-300 to-blue-100 p-2 uppercase text-gray-800">
               <h class="font-bold uppercase text-gray-600">Histori Daya (VA)</h>
             </div>
-            <div class="p-5">
-              <canvas id="chartjs-daya" class="chartjs" width="undefined" height="undefined"></canvas>
+            <div class="p-2 md:p-5">
+
+              <canvas id="chartjs-daya" class="chartjs"></canvas>
               <script>
+                const ctxA = document.getElementById("chartjs-daya");
                 let dateA = {!! json_encode($date, JSON_HEX_TAG) !!};
                 let daya = {!! json_encode($daya, JSON_HEX_TAG) !!};
-                new Chart(document.getElementById("chartjs-daya"), {
-                  "type": "line",
-                  "data": {
+                new Chart(ctxA, {
+                  type: "line",
+                  data: {
                     labels: dateA,
                     datasets: [{
-                      "label": "Daya (VA)",
-                      data: daya,
+                      label: "Daya (VA)",
+                      data: daya.reverse(),
                       borderColor: "rgba(255, 0, 132, 1)",
-                      fill: false
+                      reverse: true,
+                      fill: true
                     }]
                   },
-                  "options": {
+                  options: {
+                    rotation: (0.5 * Math.PI),
                     legend: {
-                      display: false
+                      display: false,
                     },
                   }
                 });
@@ -161,30 +164,30 @@
 
         <div class="w-full p-6 md:w-1/2 xl:w-1/2">
           <div class="rounded-lg border-transparent bg-white shadow-xl">
-            <div class="rounded-tl-lg rounded-tr-lg border-b-2 border-gray-300 bg-gradient-to-b from-gray-300 to-gray-100 p-2 uppercase text-gray-800">
+            <div class="rounded-tl-lg rounded-tr-lg border-b-2 border-gray-300 bg-gradient-to-b from-blue-300 to-blue-100 p-2 uppercase text-gray-800">
               <h2 class="font-bold uppercase text-gray-600">Histori Suhu (C&deg;)</h2>
             </div>
-            <div class="p-5">
-              <canvas id="chartjs-0" class="chartjs" width="undefined" height="undefined"></canvas>
+            <div class="p-2 md:p-5">
+              <canvas id="chart-suhu" class="chartjs"></canvas>
               <script>
+                const ctxB = document.getElementById("chart-suhu");
                 let suhu = {!! json_encode($suhu, JSON_HEX_TAG) !!};
                 let date = {!! json_encode($date, JSON_HEX_TAG) !!};
-                new Chart(document.getElementById("chartjs-0"), {
-                  "type": "line",
-                  "data": {
-                    "labels": date,
-                    "datasets": [{
-                      "label": "Suhu (C)",
-                      "data": suhu,
-                      "fill": false,
-                      "borderColor": "rgb(75, 192, 50)",
-                      "lineTension": 0.5
+                new Chart(ctxB, {
+                  type: "line",
+                  data: {
+                    labels: date,
+                    datasets: [{
+                      data: suhu.reverse(),
+                      label: "Suhu (C)",
+                      lineTension: 0.5,
+                      borderColor: "rgb(75, 192, 50)",
                     }]
                   },
-                  "options": {
+                  options: {
                     legend: {
-                      display: false
-                    }
+                      display: false,
+                    },
                   }
                 });
               </script>
@@ -192,7 +195,5 @@
           </div>
         </div>
       </div>
-
-
   </section>
 @endsection

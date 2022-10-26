@@ -4,16 +4,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="author" content="SiListrik">
-  <link rel="stylesheet" href="css/app.css">
   <meta name="description" content="SiListrik">
   <meta name="keywords" content="api,wa,listrik">
+  {{-- <link rel="stylesheet" href="css/fontawesome.css"> --}}
+  <link rel="stylesheet" href="css/app.css">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
   <title>{{ $title }} | SiListrik</title>
 
-  @if ($title == 'Home')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js" integrity="sha256-xKeoJ50pzbUGkpQxDYHD7o7hxe0LaOGeguUidbq6vis=" crossorigin="anonymous"></script>
+  @if ($active == 'home')
+    <script src="js/Chart.bundle.min.js"></script>
+    <script>
+      console.log("home")
+    </script>
   @endif
 
 </head>
@@ -41,13 +45,10 @@
     let status = initStatus;
 
     setInterval(function() {
-      // Create a ajax Object
       var xhr = new XMLHttpRequest();
       xhr.open("GET", url, true);
       xhr.setRequestHeader("Accept", "application/json");
       xhr.setRequestHeader("Authorization", "Bearer " + token);
-
-      // CHeck if the ajax object is ready
       xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
           var data = JSON.parse(this.responseText);
