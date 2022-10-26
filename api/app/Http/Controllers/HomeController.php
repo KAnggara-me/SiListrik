@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SensorLog;
 use Exception;
 use App\Models\User;
-use Spatie\Browsershot\Browsershot;
+use App\Models\SensorLog;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class HomeController extends Controller
@@ -13,19 +12,12 @@ class HomeController extends Controller
   public function index()
   {
     $sensor = SensorLog::orderBy('id', 'desc')->limit(25)->get();
-
     $last = $sensor->first();
-
-    $daya = [];
-    $suhu = [];
-    $date = [];
-
     foreach ($sensor as $s) {
-      $daya[] = ($s->voltase * $s->arus);
+      $daya[] = \number_format($s->voltase * $s->arus, '0', '.', '');
       $suhu[] = $s->temperatur;
       $date[] = $s->created_at->format('H:i') . ' WIB';
     }
-
 
     return view('main.home', [
       'title' => 'Home',
@@ -37,35 +29,34 @@ class HomeController extends Controller
     ]);
   }
 
-  public function setting()
+  public function notif()
   {
-    return view('main.setting', [
-      'title' => 'Setting',
-      'active' => 'setting'
+    $sensor = SensorLog::orderBy('id', 'desc')->limit(250)->get();
+    return view('main.notif', [
+      'title' => 'Notification',
+      'active' => 'notif',
+      'sensors' => $sensor,
     ]);
   }
 
-  public function notif()
-  {
-    return view('main.notif', [
-      'title' => 'Notification',
-      'active' => 'notif'
-    ]);
-  }
 
   public function logs()
   {
+    $sensor = SensorLog::orderBy('id', 'desc')->limit(250)->get();
     return view('main.logs', [
       'title' => 'Logs',
-      'active' => 'logs'
+      'active' => 'logs',
+      'sensors' => $sensor,
     ]);
   }
 
-  public function deviceadd()
+  public function setting()
   {
-    return view('main.deviceadd', [
-      'title' => 'Add Device',
-      'active' => 'home'
+    $sensor = SensorLog::orderBy('id', 'desc')->limit(250)->get();
+    return view('main.setting', [
+      'title' => 'Setting',
+      'active' => 'setting',
+      'sensors' => $sensor,
     ]);
   }
 
@@ -90,7 +81,6 @@ class HomeController extends Controller
 
     return redirect()->route('home');
   }
-
 
   public function qrCode()
   {
