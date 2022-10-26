@@ -43,6 +43,7 @@
         const initStatus = {{ Js::from(auth()->user()->status) }};
         const url = 'api/v1/status/' + username + '/' + token;
         let status = initStatus;
+        console.log(initStatus);
 
         setInterval(function() {
             var xhr = new XMLHttpRequest();
