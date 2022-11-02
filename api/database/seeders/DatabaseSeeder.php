@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
       BotSeeder::class,
       SensorLogSeeder::class,
       DeviceLogSeeder::class,
+      SettingSeeder::class,
     ]);
   }
 }

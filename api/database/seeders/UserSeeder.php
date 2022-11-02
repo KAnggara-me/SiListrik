@@ -18,6 +18,7 @@ class UserSeeder extends Seeder
       'username' => 'admina',
       'password' => bcrypt('admina'),
       'token' => 'KitKat',
+      'status' => 1,
       'apitoken' => 'y0xgWUtKbmOLYe_wcI^RFNK5imm8qC99V}OXodIti4RJpn{@-kelvin',
     ]);
     User::create([
@@ -26,6 +27,5 @@ class UserSeeder extends Seeder
       'token' => 'Lolipop',
       'apitoken' => 'y0xgWUtKbmOLYe_wcI^RFNK5imm8qC99V}OXodIti4RJpn{@-kelvin',
     ]);
-    User::factory(10)->create();
   }
 }

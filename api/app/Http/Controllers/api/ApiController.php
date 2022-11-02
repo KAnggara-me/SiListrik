@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\api;
 
-use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -25,9 +24,5 @@ class ApiController extends Controller
       [],
       JSON_NUMERIC_CHECK
     );
-  }
-
-  public function data()
-  {
   }
 }

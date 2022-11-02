@@ -6,18 +6,19 @@
     <meta name="author" content="SiListrik">
     <meta name="description" content="SiListrik">
     <meta name="keywords" content="api,wa,listrik">
-    {{-- <link rel="stylesheet" href="css/fontawesome.css"> --}}
     <link rel="stylesheet" href="css/app.css">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+
+    @env('local')
+    <link rel="stylesheet" href="css/all.min.css">
+    @endenv
+    {{-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"> --}}
+
     <title>{{ $title }} | SiListrik</title>
 
     @if ($active == 'home')
         <script src="js/Chart.bundle.min.js"></script>
-        <script>
-            console.log("home")
-        </script>
     @endif
 
 </head>
@@ -43,7 +44,6 @@
         const initStatus = {{ Js::from(auth()->user()->status) }};
         const url = 'api/v1/status/' + username + '/' + token;
         let status = initStatus;
-        console.log(initStatus);
 
         setInterval(function() {
             var xhr = new XMLHttpRequest();
@@ -54,7 +54,6 @@
                 if (this.readyState == 4 && this.status == 200) {
                     var data = JSON.parse(this.responseText);
                     status = data.status;
-                    console.log(status);
                 }
             };
             xhr.send();

@@ -31,4 +31,9 @@ class User extends Authenticatable
   protected $hidden = [
     'password',
   ];
+
+  public function setting()
+  {
+    return $this->hasOne(Setting::class);
+  }
 }

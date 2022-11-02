@@ -29,33 +29,12 @@ class HomeController extends Controller
     ]);
   }
 
-  public function notif()
-  {
-    $sensor = SensorLog::orderBy('id', 'desc')->limit(250)->get();
-    return view('main.notif', [
-      'title' => 'Notification',
-      'active' => 'notif',
-      'sensors' => $sensor,
-    ]);
-  }
-
-
   public function logs()
   {
     $sensor = SensorLog::orderBy('id', 'desc')->limit(250)->get();
     return view('main.logs', [
       'title' => 'Logs',
       'active' => 'logs',
-      'sensors' => $sensor,
-    ]);
-  }
-
-  public function setting()
-  {
-    $sensor = SensorLog::orderBy('id', 'desc')->limit(250)->get();
-    return view('main.setting', [
-      'title' => 'Setting',
-      'active' => 'setting',
       'sensors' => $sensor,
     ]);
   }
@@ -78,7 +57,6 @@ class HomeController extends Controller
       }
       return view('main.reconnect', ['title' => 'Scan QR', 'active' => '', 'qr' => $res['qr_code']]);
     }
-
     return redirect()->route('home');
   }
 
