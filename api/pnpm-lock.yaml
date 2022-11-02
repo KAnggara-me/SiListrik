@@ -7,6 +7,8 @@ specifiers:
   laravel-vite-plugin: ^0.5.0
   lodash: ^4.17.19
   postcss: ^8.4.16
+  prettier: ^2.7.1
+  prettier-plugin-tailwindcss: ^0.1.13
   tailwindcss: ^3.1.8
   vite: ^3.0.9
 
@@ -20,6 +22,8 @@ devDependencies:
   laravel-vite-plugin: 0.5.4_vite@3.0.9
   lodash: 4.17.21
   postcss: 8.4.16
+  prettier: 2.7.1
+  prettier-plugin-tailwindcss: 0.1.13_prettier@2.7.1
   tailwindcss: 3.1.8_postcss@8.4.16
 
 packages:
@@ -702,6 +706,21 @@ packages:
       nanoid: 3.3.4
       picocolors: 1.0.0
       source-map-js: 1.0.2
+
+  /prettier-plugin-tailwindcss/0.1.13_prettier@2.7.1:
+    resolution: {integrity: sha512-/EKQURUrxLu66CMUg4+1LwGdxnz8of7IDvrSLqEtDqhLH61SAlNNUSr90UTvZaemujgl3OH/VHg+fyGltrNixw==}
+    engines: {node: '>=12.17.0'}
+    peerDependencies:
+      prettier: '>=2.2.0'
+    dependencies:
+      prettier: 2.7.1
+    dev: true
+
+  /prettier/2.7.1:
+    resolution: {integrity: sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    dev: true
 
   /queue-microtask/1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
