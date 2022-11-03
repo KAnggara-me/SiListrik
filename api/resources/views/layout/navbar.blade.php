@@ -36,7 +36,7 @@
 					<a
 						class="{{ $active === 'bot' ? 'border-amber-600' : 'border-gray-800' }} block border-b-2 py-1 pl-0 align-middle text-white no-underline hover:border-amber-500 hover:text-white md:py-3 md:pl-1"
 						href="bot">
-						<i class="fa fa-cog {{ $active === 'bot' ? 'text-amber-600' : '' }} pr-0 pl-2 md:pr-2"></i>
+						<i class="fa fa-robot {{ $active === 'bot' ? 'text-amber-600' : '' }} pr-0 pl-2 md:pr-2"></i>
 						<span
 							class="{{ $active === 'bot' ? 'italic font-bold' : '' }} block pb-1 text-xs text-gray-400 md:inline-block md:pb-0 md:text-base md:text-gray-200">Bot</span>
 					</a>
