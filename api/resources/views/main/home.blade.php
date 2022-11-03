@@ -44,23 +44,23 @@
 				</div>
 
 				<div class="w-full p-6 md:w-1/2 xl:w-1/3">
-					<div class="rounded-lg border-b-4 border-blue-500 bg-gradient-to-b from-blue-200 to-blue-100 p-5 shadow-xl">
+					@php
+						$V = $last->voltase;
+						$I = $last->arus;
+						$P = $V * $I;
+					@endphp
+					<div
+						class="{{ $P > $setting->limit ? 'border-red-500 from-red-200 to-red-100' : 'border-blee-500 from-blue-200 to-blue-100' }} rounded-lg border-b-4 bg-gradient-to-b p-5 shadow-xl">
 						<div class="flex flex-row items-center">
 							<div class="flex-shrink pr-4">
-								<div class="rounded-full bg-blue-600 p-5">
-
+								<div class=" {{ $P > $setting->limit ? 'bg-red-600' : 'bg-blue-600' }} rounded-full  p-5 ">
 									<i class="fas fa-lightbulb fa-2x fa-inverse"></i>
 								</div>
 							</div>
 							<div class="flex-1 text-right md:text-center">
 								<h2 class="font-bold uppercase text-gray-600">Daya</h2>
 								<p class="text-2xl font-bold">
-									@php
-										$V = $last->voltase;
-										$I = $last->arus;
-										$P = $V * $I;
-										echo number_format($P, '1', '.', ',') . ' VA';
-									@endphp
+									{{ number_format($P, '1', '.', ',') . ' VA' }}
 								</p>
 							</div>
 						</div>
