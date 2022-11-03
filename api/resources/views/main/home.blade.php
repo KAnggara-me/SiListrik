@@ -8,24 +8,28 @@
 				</div>
 			</div>
 			<div class="flex flex-wrap">
-
 				<div class="w-full p-6 md:w-1/2 xl:w-1/3">
-					<div class="rounded-lg border-b-4 border-blue-500 bg-gradient-to-b from-blue-200 to-blue-100 p-5 shadow-xl">
-						<div class="flex flex-row items-center">
-							<div class="flex-shrink pr-4">
-								<div class="rounded-full bg-blue-600 p-5">
-
-									<i class="fas fa-plug fa-2x fa-inverse"></i>
+					<label class="cursor-pointer" for="large-toggle">
+						<input class="peer sr-only" id="large-toggle" type="checkbox" value=""
+							{{ $relay->status == 0 ? 'checked' : '' }}>
+						<div
+							class="peer rounded-lg border-b-4 border-blue-500 bg-gradient-to-b from-blue-200 to-blue-100 p-5 shadow-xl peer-checked:border-red-500 peer-checked:from-red-200 peer-checked:to-red-100">
+							<div class="flex flex-row items-center">
+								<div class="flex-shrink pr-4">
+									<div
+										class="peer {{ $relay->status == 1 ? 'bg-blue-600' : 'bg-red-600' }} rounded-full p-5 peer-checked:bg-red-600">
+										<i class="fas fa-plug fa-2x fa-inverse"></i>
+									</div>
+								</div>
+								<div class="flex-1 text-right md:text-center">
+									<h2 class="font-bold uppercase text-gray-600">Saklar</h2>
+									<p class="text-3xl font-bold">
+										{{ $relay->status == 1 ? 'ON' : 'OFF' }}
+									</p>
 								</div>
 							</div>
-							<div class="flex-1 text-right md:text-center">
-								<h2 class="font-bold uppercase text-gray-600">Saklar</h2>
-								<p class="text-3xl font-bold">
-									{{ $relay->status == 1 ? 'ON' : 'OFF' }}
-								</p>
-							</div>
 						</div>
-					</div>
+					</label>
 				</div>
 				<div class="w-full p-6 md:w-1/2 xl:w-1/3">
 					<div class="rounded-lg border-b-4 border-blue-500 bg-gradient-to-b from-blue-200 to-blue-100 p-5 shadow-xl">
@@ -61,7 +65,6 @@
 						</div>
 					</div>
 				</div>
-
 				<div class="w-full p-6 md:w-1/2 xl:w-1/3">
 					@php
 						$V = $last->voltase;
@@ -69,7 +72,7 @@
 						$P = $V * $I;
 					@endphp
 					<div
-						class="{{ $P > $setting->limit ? 'border-red-500 from-red-200 to-red-100' : 'border-blee-500 from-blue-200 to-blue-100' }} rounded-lg border-b-4 bg-gradient-to-b p-5 shadow-xl">
+						class="{{ $P > $setting->limit ? 'border-red-500 from-red-200 to-red-100' : 'border-blue-500 from-blue-200 to-blue-100' }} rounded-lg border-b-4 bg-gradient-to-b p-5 shadow-xl">
 						<div class="flex flex-row items-center">
 							<div class="flex-shrink pr-4">
 								<div class="{{ $P > $setting->limit ? 'bg-red-600' : 'bg-blue-600' }} rounded-full p-5">
