@@ -29,5 +29,5 @@ Route::get('/connect', [HomeController::class, 'connect'])->middleware(['auth'])
 Route::get('/logs', [HomeController::class, 'logs'])->middleware(['auth', 'connected']);
 
 // Setting
-Route::get('/setting', [SettingController::class, 'index'])->middleware(['auth', 'connected']);
-Route::post('/setting', [SettingController::class, 'setting'])->middleware(['auth', 'connected']);
+Route::get('/setting', [SettingController::class, 'edit'])->middleware(['auth', 'connected']);
+Route::post('/setting', [SettingController::class, 'update'])->middleware(['auth', 'connected']);
