@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('sensor_logs', function (Blueprint $table) {
             $table->id();
-            $table->float('voltase');
-            $table->float('arus');
-            $table->float('temperatur');
-            $table->float('kelembaban');
-            $table->float('asap');
+            $table->float('voltase')->default(220);
+            $table->float('arus')->default(1);
+            $table->float('temperatur')->default(25);
+            $table->float('kelembaban')->default(50);
+            $table->float('asap')->default(0);
             $table->integer('api')->default(0);
             $table->timestamps();
         });
