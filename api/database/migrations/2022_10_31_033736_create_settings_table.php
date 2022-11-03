@@ -6,32 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::create('settings', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('admin');
-            $table->integer('daya');
-            $table->integer('limit');
-            $table->integer('tmax');
-            $table->integer('asap');
-            $table->timestamps();
-        });
-    }
+	public function up()
+	{
+		Schema::create('settings', function (Blueprint $table) {
+			$table->id();
+			$table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+			$table->string('admin')->nullable(true);
+			$table->integer('daya')->default(900);
+			$table->integer('limit')->default(800);
+			$table->integer('tmax')->default(30);
+			$table->integer('asap')->default(300);
+			$table->timestamps();
+		});
+	}
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('settings');
-    }
+	public function down()
+	{
+		Schema::dropIfExists('settings');
+	}
 };

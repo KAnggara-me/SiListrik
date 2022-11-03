@@ -13,14 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('sensor_logs', function (Blueprint $table) {
+        Schema::create('relays', function (Blueprint $table) {
             $table->id();
-            $table->float('voltase')->default(220);
-            $table->float('arus')->default(1);
-            $table->float('temperatur')->default(25);
-            $table->float('kelembaban')->default(50);
-            $table->float('asap')->default(0);
-            $table->integer('api')->default(0);
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }
@@ -32,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sensor_logs');
+        Schema::dropIfExists('relays');
     }
 };
