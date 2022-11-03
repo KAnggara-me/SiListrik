@@ -90,17 +90,17 @@
 
 				<div class="w-full p-6 md:w-1/2 xl:w-1/3">
 					<div
-						class="{{ $last->asap > 300 ? 'border-red-500 from-red-200 to-red-100' : 'border-green-500 from-green-200 to-green-100' }} rounded-lg border-b-4 bg-gradient-to-b p-5 shadow-xl">
+						class="{{ $last->asap > $setting->asap ? 'border-red-500 from-red-200 to-red-100' : 'border-green-500 from-green-200 to-green-100' }} rounded-lg border-b-4 bg-gradient-to-b p-5 shadow-xl">
 						<div class="flex flex-row items-center">
 							<div class="flex-shrink pr-4">
-								<div class="{{ $last->asap > 300 ? 'bg-red-600' : 'bg-green-600' }} rounded-full p-5">
+								<div class="{{ $last->asap > $setting->asap ? 'bg-red-600' : 'bg-green-600' }} rounded-full p-5">
 									<i class="fas fa-smoking fa-2x fa-inverse"></i>
 								</div>
 							</div>
 							<div class="flex-1 text-right md:text-center">
 								<h2 class="font-bold uppercase text-gray-600">Asap</h2>
 								<p class="text-2xl font-bold">
-									{{ $last->asap > 300 ? 'Asap Terdeteksi' : 'Tidak Terdeteksi' }}
+									{{ $last->asap > $setting->asap ? 'Asap Terdeteksi' : 'Tidak Terdeteksi' }}
 								</p>
 							</div>
 						</div>
@@ -201,6 +201,5 @@
 					</div>
 				</div>
 			</div>
-			{{ $setting }}
 	</section>
 @endsection
