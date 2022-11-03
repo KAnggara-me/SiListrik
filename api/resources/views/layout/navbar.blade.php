@@ -12,20 +12,20 @@
 				</li>
 
 				<li class="mr-3 flex-1">
-					<a href="setting"
-						class="{{ $active === 'setting' ? 'border-amber-600' : 'border-gray-800' }} block border-b-2 py-1 pl-0 align-middle text-white no-underline hover:border-amber-500 hover:text-white md:py-3 md:pl-1">
-						<i class="fa fa-cog {{ $active === 'setting' ? 'text-amber-600' : '' }} pr-0 pl-2 md:pr-2"></i>
-						<span
-							class="block pb-1 text-xs text-gray-400 md:inline-block md:pb-0 md:text-base md:text-gray-200 {{ $active === 'setting' ? 'italic font-bold' : '' }}">Settings</span>
-					</a>
-				</li>
-
-				<li class="mr-3 flex-1">
 					<a href="logs"
 						class="{{ $active === 'logs' ? 'border-green-600' : 'border-gray-800' }} block border-b-2 py-1 pl-0 align-middle text-white no-underline hover:border-green-500 hover:text-white md:py-3 md:pl-1">
 						<i class="fa fa-clock {{ $active === 'logs' ? 'text-green-600' : '' }} pr-0 pl-2 md:pr-2"></i>
 						<span
 							class="block pb-1 text-xs text-gray-400 md:inline-block md:pb-0 md:text-base md:text-gray-200 {{ $active === 'logs' ? 'italic font-bold' : '' }}">Logs</span>
+					</a>
+				</li>
+
+				<li class="mr-3 flex-1">
+					<a href="setting"
+						class="{{ $active === 'setting' ? 'border-amber-600' : 'border-gray-800' }} block border-b-2 py-1 pl-0 align-middle text-white no-underline hover:border-amber-500 hover:text-white md:py-3 md:pl-1">
+						<i class="fa fa-cog {{ $active === 'setting' ? 'text-amber-600' : '' }} pr-0 pl-2 md:pr-2"></i>
+						<span
+							class="block pb-1 text-xs text-gray-400 md:inline-block md:pb-0 md:text-base md:text-gray-200 {{ $active === 'setting' ? 'italic font-bold' : '' }}">Settings</span>
 					</a>
 				</li>
 			</ul>
