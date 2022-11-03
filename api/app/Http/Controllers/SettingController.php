@@ -3,39 +3,51 @@
 namespace App\Http\Controllers;
 
 use App\Models\Setting;
-use App\Models\User;
+use Illuminate\Http\Request;
 
 class SettingController extends Controller
 {
-    public function index()
-    {
-        $id = auth()->user()->id;
-        $setting = Setting::where('user_id', $id)->first();
-        return view('main.setting', [
-            'title' => 'Setting',
-            'active' => 'setting',
-            'settings' => $setting,
-        ]);
-    }
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function edit()
+	{
+		$id = auth()->user()->id;
+		$setting = Setting::where('user_id', $id)->first();
+		return view('main.setting', [
+			'title' => 'Setting',
+			'active' => 'setting',
+			'settings' => $setting,
+		]);
+	}
 
-    public function setting()
-    {
-        $user = auth()->user()->id;
-        $admin = request()->input('admin');
-        $daya = request()->input('daya');
-        $limit = request()->input('limit');
-        $tmax = request()->input('tmax');
-        $asap = request()->input('asap');
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request)
+	{
+		$user = auth()->user()->id;
+		$admin = $request->input('admin');
+		$daya = $request->input('daya');
+		$limit = $request->input('limit');
+		$tmax = $request->input('tmax');
+		$asap = $request->input('asap');
 
-        $data = [
-            'admin' => $admin,
-            'daya' => $daya,
-            'limit' => $limit,
-            'tmax' => $tmax,
-            'asap' => $asap,
-        ];
+		$data = [
+			'admin' => $admin,
+			'daya' => $daya,
+			'limit' => $limit,
+			'tmax' => $tmax,
+			'asap' => $asap,
+		];
 
-        Setting::where('user_id', $user)->update($data);
-        return redirect('/setting')->with('success', 'Data Disimpan');
-    }
+		Setting::where('user_id', $user)->update($data);
+		return redirect('/setting')->with('success', 'Data Disimpan');
+	}
 }
