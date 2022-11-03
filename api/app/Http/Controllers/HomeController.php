@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\User;
+use App\Models\Setting;
 use App\Models\SensorLog;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -12,6 +13,7 @@ class HomeController extends Controller
   public function index()
   {
     $sensor = SensorLog::orderBy('id', 'desc')->limit(25)->get();
+    $setting = Setting::first();
     $last = $sensor->first();
     foreach ($sensor as $s) {
       $daya[] = \number_format($s->voltase * $s->arus, '0', '.', '');
@@ -26,6 +28,7 @@ class HomeController extends Controller
       'last' => $last,
       'daya' => $daya,
       'date' => $date,
+      'setting' => $setting,
     ]);
   }
 
