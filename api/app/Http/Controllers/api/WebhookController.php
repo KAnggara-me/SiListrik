@@ -40,88 +40,47 @@ class WebhookController extends Controller
 			$payload = request()->input('payload');
 			$status_msg = request()->input('message');
 
-			$cekid = Webhook::where('id', $id)->first();
-
-			if ($cekid) {
-				return response()->json([
-					"success" => false
-				], 400, [], JSON_NUMERIC_CHECK);
-			}
-
-			$res = Webhook::create([
-				'id' => $id,
-				'type' => $type,
+			$res = Webhook::where('id', $id)->update([
 				'status' => $status,
 				'webhook_msg' => $status_msg,
 				'message' => $payload['message'],
-				'phone_number' => $payload['phone_number'],
+				'caption' => $payload['caption'],
 				'device_id' => $payload['device_id'],
 				'message_type' => $payload['message_type'],
-				'caption' => $payload['caption'],
+				'phone_number' => $payload['phone_number'],
 			]);
 
 			return response()->json([
-				"success" => $res->isClean()
-			], 201, [], JSON_NUMERIC_CHECK);
+				"success" => $res,
+			], 200, [], JSON_NUMERIC_CHECK);
 		} elseif ($type == "incoming_message") {
-
 			$payload = request()->input('payload');
-			$msg = $payload['text'];
-			$sender = $payload['sender'];
-			$device_id = $payload['device_id'];
-
-			$bot = Bot::where('trigger', $msg)->first(); // not null
-			$apitoken = User::select('apitoken')->where('username', $device_id)->first(); // not null
-
-			// $id = request()->input('id');
-
-			// $status = request()->input('status');
-			// $payload = request()->input('payload');
-			// $status_msg = request()->input('message');
-
-
-			// $cekid = Webhook::where('id', $id)->first();
-
-			// if ($cekid) {
-			// 	return response()->json(["success" => false], 400, [], JSON_NUMERIC_CHECK);
-			// }
-
-			// $res = Webhook::create([
-			// 	'id' => $id,
-			// 	'type' => $type,
-			// 	'status' => $status,
-			// 	'webhook_msg' => $status_msg,
-			// 	'message' => $payload['message'],
-			// 	'phone' => $payload['phone_number'],
-			// 	'device_id' => $payload['device_id'],
-			// 	'message_type' => $payload['message_type'],
-			// 	'caption' => $payload['caption'],
-			// ]);
-
-			if (isset($bot) && isset($apitoken)) {
-				// try {
-				// 	$reqParams = [
-				// 		'token' => $apitoken['apitoken'],
-				// 		'url' => 'https://api.kirimwa.id/v1/messages',
-				// 		'method' => 'POST',
-				// 		'payload' => json_encode([
-				// 			'message' => $bot['response'],
-				// 			'phone_number' => $sender,
-				// 			'message_type' => 'text',
-				// 			'device_id' => $device_id,
-				// 		])
-				// 	];
-				// 	$response = apiKirimWaRequest($reqParams);
-				// 	return $response['body'];
-				// } catch (Exception $e) {
-				// 	print_r($e);
-				// }
-				return response()->json([
-					"type" => $type,
-					'bot' => $bot,
-					'apitoken' => $apitoken,
-				], 200, [], JSON_NUMERIC_CHECK);
+			$check = Webhook::where('id', $payload['id'])->first();
+			if (!isset($check)) {
+				$webhook = new Webhook();
+				$webhook->type = $type;
+				$webhook->id = $payload['id'];
+				$webhook->status = "success";
+				$webhook->webhook_msg = $type;
+				$webhook->message = $payload['text'];
+				$webhook->caption = $payload['caption'];
+				$webhook->device_id = $payload['device_id'];
+				$webhook->phone_number = $payload['sender'];
+				$webhook->message_type = $payload['message_type'];
+				$webhook->save();
+				return response()->json(
+					$payload,
+					201,
+					[],
+					JSON_NUMERIC_CHECK
+				);
 			}
+			return response()->json(
+				"This response is sent when a request conflicts with the current state of the server.",
+				409,
+				[],
+				JSON_NUMERIC_CHECK
+			);
 		}
 
 		return response()->json([
