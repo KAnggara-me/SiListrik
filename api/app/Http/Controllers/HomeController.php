@@ -38,7 +38,7 @@ class HomeController extends Controller
 
   public function logs()
   {
-    $webhook = Webhook::orderBy('id', 'desc')->limit(100)->get();
+    $webhook = Webhook::orderBy('updated_at', 'desc')->limit(100)->get();
     return view('main.logs', [
       'title' => 'Logs',
       'active' => 'logs',
