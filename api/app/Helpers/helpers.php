@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Webhook;
+
 /**
  * Make a request to API KirimWA.id
  *
@@ -65,5 +67,45 @@ if (!function_exists('tokenGen')) {
       $randomString .= $characters[rand(0, $charactersLength - 1)];
     }
     return $randomString;
+  }
+}
+
+/**
+ * Send notif to user
+ *
+ * @return string
+ */
+if (!function_exists('notifWa')) {
+  function notifWa($token, $admin, $username, $msg)
+  {
+    try {
+      $reqParams = [
+        "token" => $token,
+        "url" => "https://api.kirimwa.id/v1/messages",
+        "method" => "POST",
+        "payload" => json_encode([
+          "message" => $msg,
+          "phone_number" => $admin,
+          "message_type" => "text",
+          "device_id" => $username,
+        ])
+      ];
+      $response = apiKirimWaRequest($reqParams);
+      $response = json_decode($response['body'], true);
+      if ($response) {
+        $webhook = new Webhook();
+        $webhook->id = $response['id'];
+        $webhook->type = "send_message_response";
+        $webhook->status = $response['status'];
+        $webhook->device_id = $username;
+        $webhook->phone_number = $admin;
+        $webhook->webhook_msg = $response['message'];
+        $webhook->message = $msg;
+        $webhook->save();
+      }
+      return $response;
+    } catch (Exception $e) {
+      print_r($e);
+    }
   }
 }
