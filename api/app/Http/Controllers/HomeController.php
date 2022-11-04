@@ -45,6 +45,26 @@ class HomeController extends Controller
     ]);
   }
 
+  public function notif()
+  {
+    $sensor = SensorLog::orderBy('id', 'desc')->limit(250)->get();
+    return view('main.notif', [
+      'title' => 'Notification',
+      'active' => 'notif',
+      'sensors' => $sensor,
+    ]);
+  }
+
+  public function bot()
+  {
+    $sensor = SensorLog::orderBy('id', 'desc')->limit(250)->get();
+    return view('main.notif', [
+      'title' => 'Bot Setting',
+      'active' => 'bot',
+      'sensors' => $sensor,
+    ]);
+  }
+
   public function connect()
   {
     $username = auth()->user()->username;

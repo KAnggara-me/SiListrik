@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotifController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\SettingController;
 
@@ -27,6 +28,9 @@ Route::get('/deviceadd', [HomeController::class, 'deviceadd'])->middleware(['aut
 Route::get('/home', [HomeController::class, 'index'])->middleware(['auth', 'connected'])->name('home');
 Route::get('/connect', [HomeController::class, 'connect'])->middleware(['auth'])->name('connect');
 Route::get('/logs', [HomeController::class, 'logs'])->middleware(['auth', 'connected']);
+Route::get('/notif', [HomeController::class, 'notif'])->middleware(['auth', 'connected']);
+Route::get('/bot', [HomeController::class, 'bot'])->middleware(['auth', 'connected']);
+
 
 // Setting
 Route::get('/setting', [SettingController::class, 'edit'])->middleware(['auth', 'connected']);
