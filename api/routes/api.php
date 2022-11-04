@@ -6,6 +6,7 @@ use App\Http\Controllers\api\WebhookController;
 
 // WebHook from API 
 Route::post('/v1/webhooks', [WebhookController::class, 'index']);
+Route::post('/v1/webhooks-debug', [WebhookController::class, 'debug']);
 
 // User Status
 Route::get('/v1/status/{username}/{token}', [APIController::class, 'userStatus']);

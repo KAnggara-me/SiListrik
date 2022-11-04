@@ -88,6 +88,29 @@ class WebhookController extends Controller
 		], 400, [], JSON_NUMERIC_CHECK);
 	}
 
+	public function debug()
+	{
+		$req = request()->all();
+		$data = json_encode($req);
+		$webhook = new Webhook();
+		$webhook->type = "send_message_response";
+		$webhook->id = "123456789";
+		$webhook->status = "success";
+		$webhook->webhook_msg = "send_message_response";;
+		$webhook->message = $data;
+		$webhook->device_id = "admina";
+		$webhook->phone_number = "628123456789";
+		$webhook->message_type = "text";
+		$webhook->save();
+
+		return response()->json(
+			$webhook,
+			201,
+			[],
+			JSON_NUMERIC_CHECK
+		);
+	}
+
 	public function delete()
 	{
 		$id = request()->input('id');
