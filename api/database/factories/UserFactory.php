@@ -17,7 +17,7 @@ class UserFactory extends Factory
   public function definition()
   {
     return [
-      'username' => strtolower(fake()->lastname()),
+      'username' => strtolower(fake()->firstname() . fake()->lastname()),
       'password' => bcrypt('admina'),
       'token' => tokenGen(),
       'apitoken' => tokenGen(),
