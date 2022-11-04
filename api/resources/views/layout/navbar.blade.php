@@ -14,6 +14,16 @@
 
 				<li class="mr-3 flex-1">
 					<a
+						class="{{ $active === 'notif' ? 'border-red-600' : 'border-gray-800' }} block border-b-2 py-1 pl-0 align-middle text-white no-underline hover:border-red-500 hover:text-white md:py-3 md:pl-1"
+						href="notif">
+						<i class="fa fa-bell {{ $active === 'notif' ? 'text-red-600' : '' }} pr-0 pl-2 md:pr-2"></i>
+						<span
+							class="{{ $active === 'notif' ? 'italic font-bold' : '' }} block pb-1 text-xs text-gray-400 md:inline-block md:pb-0 md:text-base md:text-gray-200">Notifications</span>
+					</a>
+				</li>
+
+				<li class="mr-3 flex-1">
+					<a
 						class="{{ $active === 'logs' ? 'border-green-600' : 'border-gray-800' }} block border-b-2 py-1 pl-0 align-middle text-white no-underline hover:border-green-500 hover:text-white md:py-3 md:pl-1"
 						href="logs">
 						<i class="fa fa-clock {{ $active === 'logs' ? 'text-green-600' : '' }} pr-0 pl-2 md:pr-2"></i>
