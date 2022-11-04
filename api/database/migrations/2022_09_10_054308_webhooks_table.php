@@ -16,8 +16,8 @@ return new class extends Migration
 	{
 		Schema::create('webhooks', function (Blueprint $table) {
 			$table->string('id')->unique()->primary();
-			$table->enum('type', ['send_message_response', 'incoming_message', 'device_status_changed']); //send_message_response]]]]]]]]]]
-			$table->enum('status', ['success', 'fail', 'pending']); // fail or success
+			$table->enum('type', ['send_message_response', 'incoming_message', 'device_status_changed']); //send_message_response
+			$table->enum('status', ['success', 'fail', 'pending'])->nullable(); // fail or success
 			$table->string('webhook_msg'); // message
 
 			// Paylod section
