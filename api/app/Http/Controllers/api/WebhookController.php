@@ -38,8 +38,7 @@ class WebhookController extends Controller
 			$id = request()->input('id');
 			$status = request()->input('status');
 			$payload = request()->input('payload');
-			$status_msg = request()->input('message');
-
+			$status_msg = $status == "success" ? "Message sent" : $status;
 			$res = Webhook::where('id', $id)->update([
 				'status' => $status,
 				'webhook_msg' => $status_msg,
