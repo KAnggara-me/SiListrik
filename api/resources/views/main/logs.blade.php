@@ -50,7 +50,13 @@
 										{{ ucfirst($log->status) }}
 									</td>
 									<td class="border-r border-gray-200 bg-gray-100 p-2">
-										{{ $log->webhook_msg }}
+										@if ($log->webhook_msg == 'send_message_response')
+											Pesan Keluar
+										@elseif ($log->webhook_msg == 'incoming_message')
+											Pesan Masuk
+										@else
+											{{ $log->webhook_msg }}
+										@endif
 									</td>
 								</tr>
 							@endforeach
