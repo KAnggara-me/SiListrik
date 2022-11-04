@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\api;
 
 use App\Models\User;
+use App\Models\Relay;
+use App\Models\Setting;
+use App\Models\SensorLog;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Relay;
-use App\Models\SensorLog;
-use App\Models\Setting;
 
 class APIController extends Controller
 {
@@ -76,44 +76,51 @@ class APIController extends Controller
     $isHighVolt = ($arus * $voltase) > $setting->limit;
 
     if ($isFlame && $isHighSmoke && $isHighTemp) {
-      //TODO: Send to Whatsapp
+      $msg = "*Peringatan!* \n\nKebakaran terdeteksi di rumah anda. \n\n_Silahkan segera periksa!_";
+      $response = notifWa($valid->apitoken, $setting->admin, $valid->username, $msg);
       return response()->json([
         'api' => $api,
         'smoke' => $asap,
         'temp' => $temperatur,
-        'messege' => 'Kebakaran Terdeteksi'
+        'notif_status' => $response['status'],
+        'messege' => $msg,
       ]);
     }
 
     if ($isHighVolt) {
-      //TODO: Send to Whatsapp
+      $msg = "*Daya melebihi batas maksimal* \n\n" . $arus * $voltase . " VA";
+      $response = notifWa($valid->apitoken, $setting->admin, $valid->username, $msg);
       return response()->json([
         'power' => $arus * $voltase,
+        'notif_status' => $response['status'],
         'messege' => 'Daya melebihi batas maksimal ' . $arus * $voltase . ' VA'
       ]);
     }
 
     if ($isHighTemp) {
-      //TODO: Send to Whatsapp
+      $msg = "Temperatur Tinggi *" . $temperatur . "C*";
+      $response = notifWa($valid->apitoken, $setting->admin, $valid->username, $msg);
       return response()->json([
         'temp' => $temperatur,
-        'messege' => 'Temperatur Tinggi ' . $temperatur . ' C'
+        'messege' => $msg,
       ]);
     }
 
     if ($isFlame) {
-      //TODO: Send to Whatsapp
+      $msg = "*Api terdeteksi* \nIntensitas: " . $api;
+      $response = notifWa($valid->apitoken, $setting->admin, $valid->username, $msg);
       return response()->json([
         'api' => $api,
-        'messege' => 'Api terdeteksi'
+        'messege' => $msg,
       ]);
     }
 
     if ($isHighSmoke) {
-      //TODO: Send to Whatsapp
+      $msg = "*Asap terdeteksi* \nIntensitas: " . $asap . " ppm";
+      $response = notifWa($valid->apitoken, $setting->admin, $valid->username, $msg);
       return response()->json([
         'smoke' => $asap,
-        'messege' => 'Asap terdeteksi ' . $asap . ' ppm'
+        'messege' => $msg,
       ]);
     }
 
