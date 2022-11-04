@@ -15,6 +15,11 @@ return new class extends Migration
     {
         Schema::create('bots', function (Blueprint $table) {
             $table->id();
+            $table->string('device_id');
+            $table->foreign('device_id')->references('username')->on('users');
+            $table->string('description')->nullable();
+            $table->string('trigger');
+            $table->string('response');
             $table->timestamps();
         });
     }
