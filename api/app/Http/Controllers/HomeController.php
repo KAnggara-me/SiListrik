@@ -6,6 +6,7 @@ use Exception;
 use App\Models\User;
 use App\Models\Relay;
 use App\Models\Setting;
+use App\Models\Webhook;
 use App\Models\SensorLog;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -37,11 +38,11 @@ class HomeController extends Controller
 
   public function logs()
   {
-    $sensor = SensorLog::orderBy('id', 'desc')->limit(250)->get();
+    $webhook = Webhook::orderBy('id', 'desc')->limit(100)->get();
     return view('main.logs', [
       'title' => 'Logs',
       'active' => 'logs',
-      'sensors' => $sensor,
+      'logs' => $webhook,
     ]);
   }
 
