@@ -21,7 +21,7 @@ return new class extends Migration
 			$table->string('webhook_msg'); // message
 
 			// Paylod section
-			$table->string('message')->nullable(); // message
+			$table->text('message')->nullable(); // message
 			$table->string('phone_number'); // phone number
 			$table->string('device_id');
 			$table->foreign('device_id')->references('username')->on('users');
