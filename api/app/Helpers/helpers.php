@@ -76,7 +76,7 @@ if (!function_exists('tokenGen')) {
  * @return string
  */
 if (!function_exists('notifWa')) {
-  function notifWa($token, $reciver, $username, $msg)
+  function notifWa($token, $reciver, $username, $msg, $group = false)
   {
     try {
       $reqParams = [
@@ -85,9 +85,10 @@ if (!function_exists('notifWa')) {
         "method" => "POST",
         "payload" => json_encode([
           "message" => $msg,
-          "phone_number" => $reciver,
-          "message_type" => "text",
           "device_id" => $username,
+          "message_type" => "text",
+          "phone_number" => $reciver,
+          "is_group_message" => $group,
         ])
       ];
       $response = apiKirimWaRequest($reqParams);
