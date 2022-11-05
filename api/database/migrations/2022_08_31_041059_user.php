@@ -18,7 +18,7 @@ return new class extends Migration
       $table->string('username')->unique();
       $table->string('password');
       $table->string('token', 64)->unique();
-      $table->string('apitoken', 255)->nullable(true);
+      $table->string('apitoken', 255);
       $table->integer('status')->default(0);
       $table->timestamps();
     });
