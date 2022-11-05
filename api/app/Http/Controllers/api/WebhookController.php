@@ -80,11 +80,11 @@ class WebhookController extends Controller
 			$webhook->message_type = $payload['message_type'];
 			$webhook->save();
 
-			if ($payload['text'] == "status") {
+			if (strtolower($payload['text']) == "status") {
 				$data = SensorLog::orderBy('updated_at', 'desc')->first();
 				$date = $data->updated_at->format('d/M/y H:i:s');
 				$daya = ($data->arus * $data->voltase) == 0 ? "_error_" : number_format(($data->arus * $data->voltase), '0', ',', '.');
-				$msg = "\n_Status Sensor_\n\n*Daya Digunakan:* " . $daya . " VA" . "\n*Temperatur:* " . $data->temperatur . "C°" . "\n*Asap:* " . $data->asap . "ppm" . "\n\n```Update Terakhir:``` " . $date . "\n";
+				$msg = "\n_Status Sensor_\n\n*Daya Digunakan:* " . $daya . " VA" . "\n*Temperatur:* " . number_format(($data->temperatur), '0', ',', '.') . "C°" . "\n*Asap:* " . number_format(($data->asap), '0', ',', '.') . "ppm" . "\n\n```Update Terakhir:``` " . $date . "\n";
 				$token = User::where('username', $payload['device_id'])->first()->apitoken;
 				$response = notifWa($token, $reciver, $payload['device_id'], $msg, $group);
 				return response()->json(
@@ -95,7 +95,7 @@ class WebhookController extends Controller
 				);
 			}
 
-			$trigered = Bot::where('trigger', $payload['text'])->where('device_id', $payload['device_id'])->first();
+			$trigered = Bot::where('trigger', strtolower($payload['text']))->where('device_id', $payload['device_id'])->first();
 			if ($trigered) {
 				$token = User::where('username', $payload['device_id'])->first()->apitoken;
 				$response = notifWa($token, $reciver, $payload['device_id'], $trigered->response, $group);
