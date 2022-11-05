@@ -5,9 +5,9 @@ namespace App\Http\Controllers\api;
 use App\Models\Bot;
 use App\Models\User;
 use App\Models\Webhook;
-use App\Http\Controllers\Controller;
 use App\Models\DeviceLog;
 use App\Models\SensorLog;
+use App\Http\Controllers\Controller;
 
 class WebhookController extends Controller
 {
@@ -55,21 +55,30 @@ class WebhookController extends Controller
 			], 200, [], JSON_NUMERIC_CHECK);
 		} elseif ($type == "incoming_message") {
 			$payload = request()->input('payload');
+			$group = $payload['is_group_message'];
+			$reciver = $group ? $payload["group_id"] : $payload['sender'];
 			$check = Webhook::where('id', $payload['id'])->first();
 
-			if (!isset($check)) {
-				$webhook = new Webhook();
-				$webhook->type = $type;
-				$webhook->id = $payload['id'];
-				$webhook->status = "success";
-				$webhook->webhook_msg = $type;
-				$webhook->message = $payload['text'];
-				$webhook->caption = $payload['caption'];
-				$webhook->device_id = $payload['device_id'];
-				$webhook->phone_number = $payload['sender'];
-				$webhook->message_type = $payload['message_type'];
-				$webhook->save();
+			if (isset($check)) {
+				return response()->json(
+					"This response is sent when a request conflicts",
+					409,
+					[],
+					JSON_NUMERIC_CHECK
+				);
 			}
+
+			$webhook = new Webhook();
+			$webhook->type = $type;
+			$webhook->id = $payload['id'];
+			$webhook->status = "success";
+			$webhook->webhook_msg = $type;
+			$webhook->message = $payload['text'];
+			$webhook->caption = $payload['caption'];
+			$webhook->device_id = $payload['device_id'];
+			$webhook->phone_number = $payload['sender'];
+			$webhook->message_type = $payload['message_type'];
+			$webhook->save();
 
 			if ($payload['text'] == "status") {
 				$data = SensorLog::orderBy('updated_at', 'desc')->first();
@@ -77,7 +86,7 @@ class WebhookController extends Controller
 				$daya = ($data->arus * $data->voltase) == 0 ? "_error_" : number_format(($data->arus * $data->voltase), '0', ',', '.');
 				$msg = "\n_Status Sensor_\n\n*Daya Digunakan:* " . $daya . " VA" . "\n*Temperatur:* " . $data->temperatur . "C°" . "\n*Asap:* " . $data->asap . "ppm" . "\n\n```Update Terakhir:``` " . $date . "\n";
 				$token = User::where('username', $payload['device_id'])->first()->apitoken;
-				$response = notifWa($token, $payload['sender'], $payload['device_id'], $msg);
+				$response = notifWa($token, $reciver, $payload['device_id'], $msg, $group);
 				return response()->json(
 					$msg,
 					201,
@@ -89,7 +98,7 @@ class WebhookController extends Controller
 			$trigered = Bot::where('trigger', $payload['text'])->where('device_id', $payload['device_id'])->first();
 			if ($trigered) {
 				$token = User::where('username', $payload['device_id'])->first()->apitoken;
-				$response = notifWa($token, $payload['sender'], $payload['device_id'], $trigered->response);
+				$response = notifWa($token, $reciver, $payload['device_id'], $trigered->response, $group);
 				return response()->json(
 					$response,
 					201,
@@ -97,12 +106,6 @@ class WebhookController extends Controller
 					JSON_NUMERIC_CHECK
 				);
 			}
-			return response()->json(
-				"This response is sent when a request conflicts with the current state of the server.",
-				409,
-				[],
-				JSON_NUMERIC_CHECK
-			);
 		}
 
 		return response()->json([
