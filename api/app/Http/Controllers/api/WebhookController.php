@@ -109,13 +109,4 @@ class WebhookController extends Controller
 			JSON_NUMERIC_CHECK
 		);
 	}
-
-	public function delete()
-	{
-		$id = request()->input('id');
-		$data = Webhook::where('id', $id)->delete();
-		return response()->json([
-			"success" => $data,
-		], 202, [], JSON_NUMERIC_CHECK);
-	}
 }
