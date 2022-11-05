@@ -75,7 +75,7 @@ class WebhookController extends Controller
 				$data = SensorLog::orderBy('updated_at', 'desc')->first();
 				$date = $data->updated_at->format('d/M/y H:i:s');
 				$daya = ($data->arus * $data->voltase) == 0 ? "_error_" : number_format(($data->arus * $data->voltase), '0', ',', '.');
-				$msg = "Daya Digunakan: " . $daya . " VA" . "\nTemperatur: " . $data->temperatur . "C°" . "\nAsap: " . $data->asap . "ppm" . "\n\n_Update Terakhir:_ " . $date;
+				$msg = "\n_Status Sensor_\n\n*Daya Digunakan:* " . $daya . " VA" . "\n*Temperatur:* " . $data->temperatur . "C°" . "\n*Asap:* " . $data->asap . "ppm" . "\n\n```Update Terakhir:``` " . $date . "\n";
 				$token = User::where('username', $payload['device_id'])->first()->apitoken;
 				$response = notifWa($token, $payload['sender'], $payload['device_id'], $msg);
 				return response()->json(
