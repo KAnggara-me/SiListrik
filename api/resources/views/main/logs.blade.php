@@ -13,7 +13,7 @@
 					<table class="mt-5 w-full border">
 						<thead>
 							@php
-								$judul = ['Waktu', 'Penerima', 'Pesan', 'Type', 'Status', 'Keterangan'];
+								$judul = ['Waktu', 'Penerima/ Penerima', 'Pesan', 'Type', 'Status', 'Keterangan'];
 							@endphp
 							<tr class="border-b bg-gray-700">
 								@for ($i = 0; $i < count($judul); $i++)
@@ -33,7 +33,7 @@
 
 									<td class="border-r border-gray-200 bg-gray-100 p-2">
 										<a href="http://wa.me/{{ $log->phone_number }}">
-											{{ $log->phone_number }}
+											{{ substr($log->phone_number, 0, 5) . ' ' . substr($log->phone_number, 5, 4) . ' ' . substr($log->phone_number, 9, 4) . ' ' . substr($log->phone_number, 13, 2) }}
 										</a>
 									</td>
 									<td class="border-r border-gray-200 bg-gray-100 p-2">
