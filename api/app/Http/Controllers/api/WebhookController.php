@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Webhook;
 use App\Http\Controllers\Controller;
 use App\Models\DeviceLog;
+use App\Models\SensorLog;
 
 class WebhookController extends Controller
 {
@@ -55,6 +56,7 @@ class WebhookController extends Controller
 		} elseif ($type == "incoming_message") {
 			$payload = request()->input('payload');
 			$check = Webhook::where('id', $payload['id'])->first();
+
 			if (!isset($check)) {
 				$webhook = new Webhook();
 				$webhook->type = $type;
@@ -67,8 +69,29 @@ class WebhookController extends Controller
 				$webhook->phone_number = $payload['sender'];
 				$webhook->message_type = $payload['message_type'];
 				$webhook->save();
+			}
+
+			if ($payload['text'] == "status") {
+				$data = SensorLog::orderBy('updated_at', 'desc')->first();
+				$date = $data->updated_at->format('d/M/y H:i:s');
+				$daya = ($data->arus * $data->voltase) == 0 ? "_error_" : number_format(($data->arus * $data->voltase), '0', ',', '.');
+				$msg = "Daya Digunakan: " . $daya . " VA" . "\nTemperatur: " . $data->temperatur . "C°" . "\nAsap: " . $data->asap . "ppm" . "\n\n_Update Terakhir:_ " . $date;
+				$token = User::where('username', $payload['device_id'])->first()->apitoken;
+				$response = notifWa($token, $payload['sender'], $payload['device_id'], $msg);
 				return response()->json(
-					$payload,
+					$msg,
+					201,
+					[],
+					JSON_NUMERIC_CHECK
+				);
+			}
+
+			$trigered = Bot::where('trigger', $payload['text'])->where('device_id', $payload['device_id'])->first();
+			if ($trigered) {
+				$token = User::where('username', $payload['device_id'])->first()->apitoken;
+				$response = notifWa($token, $payload['sender'], $payload['device_id'], $trigered->response);
+				return response()->json(
+					$response,
 					201,
 					[],
 					JSON_NUMERIC_CHECK
