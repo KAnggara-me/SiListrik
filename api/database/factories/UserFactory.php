@@ -20,7 +20,7 @@ class UserFactory extends Factory
       'username' => strtolower(fake()->firstname() . fake()->lastname()),
       'password' => bcrypt('admina'),
       'token' => tokenGen(),
-      'apitoken' => tokenGen(),
+      'apitoken' => tokenGen(56),
     ];
   }
 }
