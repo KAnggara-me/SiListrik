@@ -76,7 +76,7 @@ if (!function_exists('tokenGen')) {
  * @return string
  */
 if (!function_exists('notifWa')) {
-  function notifWa($token, $admin, $username, $msg)
+  function notifWa($token, $reciver, $username, $msg)
   {
     try {
       $reqParams = [
@@ -85,7 +85,7 @@ if (!function_exists('notifWa')) {
         "method" => "POST",
         "payload" => json_encode([
           "message" => $msg,
-          "phone_number" => $admin,
+          "phone_number" => $reciver,
           "message_type" => "text",
           "device_id" => $username,
         ])
@@ -98,7 +98,7 @@ if (!function_exists('notifWa')) {
         $webhook->type = "send_message_response";
         $webhook->status = $response['status'];
         $webhook->device_id = $username;
-        $webhook->phone_number = $admin;
+        $webhook->phone_number = $reciver;
         $webhook->webhook_msg = $response['message'];
         $webhook->message = $msg;
         $webhook->save();
