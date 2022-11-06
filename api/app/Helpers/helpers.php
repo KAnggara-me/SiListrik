@@ -90,7 +90,7 @@ if (!function_exists('notifWa')) {
         "method" => "POST",
         "payload" => json_encode([
           "message" => $msg,
-          "caption" => $type != "image" ? $caption : null,
+          "caption" => $type == "image" ? $caption : null,
           "device_id" => $username,
           "message_type" => $type,
           "phone_number" => $reciver,
@@ -110,7 +110,7 @@ if (!function_exists('notifWa')) {
         $webhook->message = $msg;
         $webhook->save();
       }
-      return $response;
+      return $caption;
     } catch (Exception $e) {
       print_r($e);
     }
