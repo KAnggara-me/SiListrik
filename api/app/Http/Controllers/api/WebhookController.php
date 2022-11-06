@@ -122,7 +122,7 @@ class WebhookController extends Controller
 		$webhook->type = "send_message_response";
 		$webhook->id = tokenGen();
 		$webhook->status = "success";
-		$webhook->webhook_msg = "send_message_response";;
+		$webhook->webhook_msg = "send_message_response";
 		$webhook->message = $data;
 		$webhook->device_id = "admina";
 		$webhook->phone_number = "628123456789";
