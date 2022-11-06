@@ -55,51 +55,60 @@ class WebhookController extends Controller
 			], 200, [], JSON_NUMERIC_CHECK);
 		} elseif ($type == "incoming_message") {
 			$payload = request()->input('payload');
-			$group = $payload['is_group_message'];
-			$reciver = $group ? $payload["group_id"] : $payload['sender'];
-			$check = Webhook::where('id', $payload['id'])->first();
 
-			if (isset($check)) {
-				return response()->json(
-					"This response is sent when a request conflicts",
-					409,
-					[],
-					JSON_NUMERIC_CHECK
-				);
+			$username = $payload['device_id'];
+			$isGroup = $payload['is_group_message'];
+			$isStatus = strtolower($payload['text']) == "status";
+			$reciver = $isGroup ? $payload["group_id"] : $payload['sender'];
+
+			$isTriggred = Bot::where('trigger', strtolower($payload['text']))->where('device_id', $username)->first();
+
+			if ($isTriggred || $isStatus) {
+				$webhook = new Webhook();
+				if (env('APP_ENV') == 'local') {
+					$webhook->id = tokenGen();
+				} else {
+					$webhook->id = $payload['id'];
+				}
+				$webhook->type = $type;
+				$webhook->status = "success";
+				$webhook->webhook_msg = $type;
+				$webhook->message = $payload['text'];
+				$webhook->caption = $payload['caption'];
+				$webhook->device_id = $username;
+				$webhook->phone_number = $payload['sender'];
+				$webhook->message_type = $payload['message_type'];
+				$webhook->save();
 			}
 
-			$webhook = new Webhook();
-			$webhook->type = $type;
-			$webhook->id = $payload['id'];
-			$webhook->status = "success";
-			$webhook->webhook_msg = $type;
-			$webhook->message = $payload['text'];
-			$webhook->caption = $payload['caption'];
-			$webhook->device_id = $payload['device_id'];
-			$webhook->phone_number = $payload['sender'];
-			$webhook->message_type = $payload['message_type'];
-			$webhook->save();
-
-			if (strtolower($payload['text']) == "status") {
+			if ($isStatus) {
 				$data = SensorLog::orderBy('updated_at', 'desc')->first();
 				$date = $data->updated_at->format('d/M/y H:i:s');
 				$daya = ($data->arus * $data->voltase) == 0 ? "_error_" : number_format(($data->arus * $data->voltase), '0', ',', '.');
 				$caption = "\n_Status Sensor_\n\n*Daya Digunakan:* " . $daya . " VA" . "\n*Temperatur:* " . number_format(($data->temperatur), '0', ',', '.') . "C°" . "\n*Asap:* " . number_format(($data->asap), '0', ',', '.') . "ppm" . "\n\n```Update Terakhir:``` " . $date . "\n";
-				$token = User::where('username', $payload['device_id'])->first()->apitoken;
-				$msg = "https://github.com/kanggara.png";
-				$response = notifWa($token, $reciver, $payload['device_id'], $msg, $group, "image", $caption);
-				return response()->json(
+				$token = User::where('username', $username)->first()->apitoken;
+				$msg = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_Homepage.svg/300px-Google_Homepage.svg.png";
+				$response = notifWa(
+					$token,
+					$reciver,
+					$username,
 					$msg,
+					$isGroup,
+					"image",
+					$caption,
+				);
+				return response()->json(
+					$response,
 					201,
 					[],
 					JSON_NUMERIC_CHECK
 				);
 			}
 
-			$trigered = Bot::where('trigger', strtolower($payload['text']))->where('device_id', $payload['device_id'])->first();
-			if ($trigered) {
-				$token = User::where('username', $payload['device_id'])->first()->apitoken;
-				$response = notifWa($token, $reciver, $payload['device_id'], $trigered->response, $group);
+			if ($isTriggred) {
+				$msg = $isTriggred->response;
+				$token = User::where('username', $username)->first()->apitoken;
+				$response = notifWa($token, $reciver, $username, $msg, $isGroup);
 				return response()->json(
 					$response,
 					201,
