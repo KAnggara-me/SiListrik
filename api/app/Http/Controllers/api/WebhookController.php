@@ -116,6 +116,10 @@ class WebhookController extends Controller
 					JSON_NUMERIC_CHECK
 				);
 			}
+
+			return response()->json([
+				"recived" => true,
+			], 200, [], JSON_NUMERIC_CHECK);
 		}
 
 		return response()->json([
