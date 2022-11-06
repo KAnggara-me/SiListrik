@@ -26,7 +26,7 @@
 
 						<tbody>
 							@foreach ($logs as $log)
-								<tr class="border-b border-gray-200 text-center text-xs text-black md:text-sm">
+								<tr class="border-b border-gray-300 text-center text-xs text-black md:text-sm">
 									<td
 										class="{{ $log->webhook_msg == 'incoming_message' ? 'bg-gray-100' : 'bg-gray-200' }} border-r border-gray-300 p-2">
 										{{ $log->updated_at->format('d/m/y H:i:s') }}
@@ -62,7 +62,6 @@
 											{{ $log->webhook_msg }}
 										@endif
 									</td>
-
 								</tr>
 							@endforeach
 						</tbody>
