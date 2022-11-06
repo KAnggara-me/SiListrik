@@ -34,7 +34,7 @@
 									<td
 										class="{{ $log->webhook_msg == 'incoming_message' ? 'bg-gray-100' : 'bg-gray-200' }} border-r border-gray-300 p-2">
 										<a href="http://wa.me/{{ $log->phone_number }}">
-											{{ substr($log->phone_number, 0, 5) . ' ' . substr($log->phone_number, 5, 4) . ' ' . substr($log->phone_number, 9, 4) . ' ' . substr($log->phone_number, 13, 2) }}
+											{{ substr($log->phone_number, 0, 5) . ' ' . substr($log->phone_number, 5, 4) . ' ' . substr($log->phone_number, 9, 4) }}
 										</a>
 									</td>
 									<td
