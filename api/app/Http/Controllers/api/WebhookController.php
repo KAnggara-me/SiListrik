@@ -87,7 +87,10 @@ class WebhookController extends Controller
 				$daya = ($data->arus * $data->voltase) == 0 ? "_error_" : number_format(($data->arus * $data->voltase), '0', ',', '.');
 				$caption = "\n_Status Sensor_\n\n*Daya Digunakan:* " . $daya . " VA" . "\n*Temperatur:* " . number_format(($data->temperatur), '0', ',', '.') . "C°" . "\n*Asap:* " . number_format(($data->asap), '0', ',', '.') . "ppm" . "\n\n```Update Terakhir:``` " . $date . "\n";
 				$token = User::where('username', $username)->first()->apitoken;
-				$msg = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_Homepage.svg/300px-Google_Homepage.svg.png";
+				$time = time();
+				$image = getImage($time);
+				$isExist = file_exists(public_path('images/' . $time . '.jpg'));
+				$msg = ($isExist && $image) ? "https://silistrik.apiwa.tech/images/" . $time . ".jpg" : "https://silistrik.apiwa.tech/images/img.jpg";
 				$response = notifWa(
 					$token,
 					$reciver,
