@@ -72,11 +72,16 @@ if (!function_exists('tokenGen')) {
 
 /**
  * Send notif to user
- *
+ * @param String $token
+ * @param Number $receiver
+ * @param String $username
+ * @param String $msg
+ * @param Boolean $isGroup
+ * @param String $type
  * @return string
  */
 if (!function_exists('notifWa')) {
-  function notifWa($token, $reciver, $username, $msg, $group = false, $type = "text", $caption = null)
+  function notifWa($token, $reciver, $username, $msg, $isGroup = false, $type = "text", $caption = null)
   {
     try {
       $reqParams = [
@@ -89,7 +94,7 @@ if (!function_exists('notifWa')) {
           "device_id" => $username,
           "message_type" => $type,
           "phone_number" => $reciver,
-          "is_group_message" => $group,
+          "is_group_message" => $isGroup,
         ])
       ];
       $response = apiKirimWaRequest($reqParams);
