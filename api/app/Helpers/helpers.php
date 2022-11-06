@@ -76,7 +76,7 @@ if (!function_exists('tokenGen')) {
  * @return string
  */
 if (!function_exists('notifWa')) {
-  function notifWa($token, $reciver, $username, $msg, $group = false)
+  function notifWa($token, $reciver, $username, $msg, $group = false, $type = "text", $caption = null)
   {
     try {
       $reqParams = [
@@ -85,8 +85,9 @@ if (!function_exists('notifWa')) {
         "method" => "POST",
         "payload" => json_encode([
           "message" => $msg,
+          "caption" => $type != "image" ? $caption : null,
           "device_id" => $username,
-          "message_type" => "text",
+          "message_type" => $type,
           "phone_number" => $reciver,
           "is_group_message" => $group,
         ])
