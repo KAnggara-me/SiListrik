@@ -107,6 +107,7 @@ if (!function_exists('notifWa')) {
         $webhook->device_id = $username;
         $webhook->phone_number = $reciver;
         $webhook->webhook_msg = $response['message'];
+        $webhook->message_type = $type;
         $webhook->message = $msg;
         $webhook->save();
       }
