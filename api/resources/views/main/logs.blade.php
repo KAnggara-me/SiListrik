@@ -26,9 +26,10 @@
 
 						<tbody>
 							@foreach ($logs as $log)
-								<tr class="border-b border-gray-300 text-center text-xs text-black md:text-sm">
+								<tr
+									class="items-center border-b border-gray-300 object-none object-center text-center text-xs text-black md:text-sm">
 									<td
-										class="{{ $log->webhook_msg == 'incoming_message' ? 'bg-gray-100' : 'bg-gray-200' }} border-r border-gray-300 p-2">
+										class="{{ $log->webhook_msg == 'incoming_message' ? 'bg-gray-100' : 'bg-gray-200' }} border-r border-l border-gray-300 p-2">
 										{{ $log->updated_at->format('d/m/y H:i:s') }}
 									</td>
 									<td
@@ -39,7 +40,15 @@
 									</td>
 									<td
 										class="{{ $log->webhook_msg == 'incoming_message' ? 'bg-gray-100' : 'bg-gray-200' }} border-r border-gray-300 p-2">
-										{{ preg_replace('/[^A-Za-z0-9\-]/', ' ', $log->message) }}
+										@if ($log->message_type == 'text')
+											{{ preg_replace('/[^A-Za-z0-9\-]/', ' ', $log->message) }}
+										@elseif($log->message_type == 'image')
+											<img class="" class="" src="{{ $log->message }}" alt="{{ $log->caption }}">
+											<br>
+											@php
+												echo nl2br($log->caption);
+											@endphp
+										@endif
 									</td>
 									<td
 										class="{{ $log->webhook_msg == 'incoming_message' ? 'bg-gray-100' : 'bg-gray-200' }} border-r border-gray-300 p-2">
