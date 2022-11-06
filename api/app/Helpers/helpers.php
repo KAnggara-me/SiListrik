@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Webhook;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Make a request to API KirimWA.id
@@ -115,5 +116,30 @@ if (!function_exists('notifWa')) {
     } catch (Exception $e) {
       print_r($e);
     }
+  }
+}
+
+/**
+ * Get Status Image
+ * @param int $time
+ * @return boolean
+ */
+if (!function_exists('getImage')) {
+  function getImage($time)
+  {
+    $api = env('PS_API');
+    $url = env('STATUS_URL', "https://silistrik.apiwa.tech");
+    $req = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url={$url}&key={$api}";
+
+    $res = file_get_contents($req);
+    $data = json_decode($res, true);
+    $base64_image = $data['lighthouseResult']['audits']['full-page-screenshot']['details']['screenshot']['data'];
+    $base64_image = explode(",", $base64_image);
+    $image = str_replace('data:image/jpeg;base64,', '', $base64_image);
+    $img = base64_decode($image[1]);
+    $path = "images/" .  $time . '.' . 'jpg';
+    $status = Storage::put($path, $img);
+
+    return $status;
   }
 }
