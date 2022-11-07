@@ -112,7 +112,7 @@ if (!function_exists('notifWa')) {
         $webhook->message = $msg;
         $webhook->save();
       }
-      return $caption;
+      return $response;
     } catch (Exception $e) {
       print_r($e);
     }
