@@ -89,6 +89,7 @@ class WebhookController extends Controller
 				$token = User::where('username', $username)->first()->apitoken;
 				$time = time();
 				$image = getImage($time);
+				sleep(5);
 				$isExist = file_exists(public_path('images/' . $time . '.jpg'));
 				$msg = ($isExist && $image) ? "https://silistrik.apiwa.tech/images/" . $time . ".jpg" : "https://silistrik.apiwa.tech/images/img.jpg";
 				$response = notifWa(
