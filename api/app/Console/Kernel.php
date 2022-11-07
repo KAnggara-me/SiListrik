@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
 			if ($deleted) {
 				$unusedFile->delete();
 			}
-		});
+		})->everyFiveMinutes();
 
 		// Generate image file
 		$schedule->call(function () {
@@ -56,7 +56,7 @@ class Kernel extends ConsoleKernel
 				$status->images = $path;
 				$status->save();
 			}
-		});
+		})->everyFiveMinutes();
 	}
 
 	/**
