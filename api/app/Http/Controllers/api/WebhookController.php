@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Models\Bot;
 use App\Models\User;
+use App\Models\Status;
 use App\Models\Webhook;
 use App\Models\DeviceLog;
 use App\Models\SensorLog;
@@ -61,6 +62,7 @@ class WebhookController extends Controller
 			$isData = strtolower($payload['text']) == "data";
 			$isStatus = strtolower($payload['text']) == "status";
 			$reciver = $isGroup ? $payload["group_id"] : $payload['sender'];
+			$token = User::where('username', $username)->first()->apitoken;
 			$isTriggred = Bot::where('trigger', strtolower($payload['text']))->where('device_id', $username)->first();
 
 			if ($isTriggred || $isStatus || $isData) {
@@ -81,50 +83,42 @@ class WebhookController extends Controller
 				$webhook->save();
 			}
 
-			if ($isData) {
+			if ($isStatus || $isData) {
+				$response = "";
 				$data = SensorLog::orderBy('updated_at', 'desc')->first();
 				$date = $data->updated_at->format('d/M/y H:i:s');
-				$type = "text";
+				$asap = number_format(($data->asap), '0', ',', '.');
+				$temp = number_format(($data->temperatur), '0', ',', '.');
 				$daya = ($data->arus * $data->voltase) == 0 ? "_error_" : number_format(($data->arus * $data->voltase), '0', ',', '.');
-				$msg = "\n_Status Sensor_\n\n*Daya Digunakan:* " . $daya . " VA" . "\n*Temperatur:* " . number_format(($data->temperatur), '0', ',', '.') . "C°" . "\n*Asap:* " . number_format(($data->asap), '0', ',', '.') . "ppm" . "\n\n```Update Terakhir:``` " . $date . "\n";
-				$token = User::where('username', $username)->first()->apitoken;
+				$caption = "\n_Status Sensor_\n\n*Daya Digunakan:* " . $daya . " VA" . "\n*Temperatur:* " . $temp . "C°" . "\n*Asap:* " . $asap . "ppm" . "\n\n```Update Terakhir:``` " . $date . "\n";
 
-				$response = notifWa(
-					$token,
-					$reciver,
-					$username,
-					$msg,
-					$isGroup,
-				);
+				if ($isData) {
+					$response = notifWa(
+						$token,
+						$reciver,
+						$username,
+						$caption,
+						$isGroup,
+					);
+				}
 
-				return response()->json(
-					$response,
-					201,
-					[],
-					JSON_NUMERIC_CHECK
-				);
-			}
+				if ($isStatus) {
+					$msg = Status::orderBy('updated_at', 'desc')->first();
+					$img = "https://silistrik.apiwa.tech/" . $msg->images;
+					$response = notifWa(
+						$token,
+						$reciver,
+						$username,
+						$img,
+						$isGroup,
+						"image",
+						$caption,
+					);
+					if (isset($response["id"])) {
+						$msg->update(['isUsage' => 1]);
+					}
+				}
 
-			if ($isStatus) {
-				$data = SensorLog::orderBy('updated_at', 'desc')->first();
-				$date = $data->updated_at->format('d/M/y H:i:s');
-				$daya = ($data->arus * $data->voltase) == 0 ? "_error_" : number_format(($data->arus * $data->voltase), '0', ',', '.');
-				$caption = "\n_Status Sensor_\n\n*Daya Digunakan:* " . $daya . " VA" . "\n*Temperatur:* " . number_format(($data->temperatur), '0', ',', '.') . "C°" . "\n*Asap:* " . number_format(($data->asap), '0', ',', '.') . "ppm" . "\n\n```Update Terakhir:``` " . $date . "\n";
-				$token = User::where('username', $username)->first()->apitoken;
-				$time = time();
-				$image = getImage($time);
-				sleep(5);
-				$isExist = file_exists(public_path('images/' . $time . '.jpg'));
-				$msg = ($isExist && $image) ? "https://silistrik.apiwa.tech/images/" . $time . ".jpg" : "https://silistrik.apiwa.tech/images/img.jpg";
-				$response = notifWa(
-					$token,
-					$reciver,
-					$username,
-					$msg,
-					$isGroup,
-					"image",
-					$caption,
-				);
 				return response()->json(
 					$response,
 					201,
@@ -135,7 +129,6 @@ class WebhookController extends Controller
 
 			if ($isTriggred) {
 				$msg = $isTriggred->response;
-				$token = User::where('username', $username)->first()->apitoken;
 				$response = notifWa($token, $reciver, $username, $msg, $isGroup);
 				return response()->json(
 					$response,
