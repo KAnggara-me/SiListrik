@@ -63,7 +63,7 @@ class WebhookController extends Controller
 			$reciver = $isGroup ? $payload["group_id"] : $payload['sender'];
 			$isTriggred = Bot::where('trigger', strtolower($payload['text']))->where('device_id', $username)->first();
 
-			if ($isTriggred || $isStatus) {
+			if ($isTriggred || $isStatus || $isData) {
 				$webhook = new Webhook();
 				if (env('APP_ENV') == 'local') {
 					$webhook->id = tokenGen();
