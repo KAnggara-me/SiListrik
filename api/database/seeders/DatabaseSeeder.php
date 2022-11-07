@@ -16,7 +16,6 @@ class DatabaseSeeder extends Seeder
   {
     $this->call([
       UserSeeder::class,
-      WebhookSeeder::class,
       BotSeeder::class,
       SensorLogSeeder::class,
       DeviceLogSeeder::class,
