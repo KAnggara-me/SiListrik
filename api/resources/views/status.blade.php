@@ -23,7 +23,7 @@
 <body class="bg-gray-800 font-sans leading-normal tracking-normal">
 	<main>
 		<section>
-			<div class="main-content mt-6 flex-1 rounded-3xl bg-gray-100" id="main">
+			<div class="main-content mt-7 flex-1 rounded-3xl bg-gray-100" id="main">
 				<div class="bg-gray-800 pt-3">
 					<div
 						class="items-center justify-center rounded-t-3xl bg-gradient-to-r from-blue-400 to-blue-700 p-4 text-2xl text-white shadow">
