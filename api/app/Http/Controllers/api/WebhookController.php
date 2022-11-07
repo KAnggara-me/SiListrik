@@ -58,9 +58,9 @@ class WebhookController extends Controller
 
 			$username = $payload['device_id'];
 			$isGroup = $payload['is_group_message'];
+			$isData = strtolower($payload['text']) == "data";
 			$isStatus = strtolower($payload['text']) == "status";
 			$reciver = $isGroup ? $payload["group_id"] : $payload['sender'];
-
 			$isTriggred = Bot::where('trigger', strtolower($payload['text']))->where('device_id', $username)->first();
 
 			if ($isTriggred || $isStatus) {
@@ -79,6 +79,30 @@ class WebhookController extends Controller
 				$webhook->phone_number = $payload['sender'];
 				$webhook->message_type = $payload['message_type'];
 				$webhook->save();
+			}
+
+			if ($isData) {
+				$data = SensorLog::orderBy('updated_at', 'desc')->first();
+				$date = $data->updated_at->format('d/M/y H:i:s');
+				$type = "text";
+				$daya = ($data->arus * $data->voltase) == 0 ? "_error_" : number_format(($data->arus * $data->voltase), '0', ',', '.');
+				$msg = "\n_Status Sensor_\n\n*Daya Digunakan:* " . $daya . " VA" . "\n*Temperatur:* " . number_format(($data->temperatur), '0', ',', '.') . "C°" . "\n*Asap:* " . number_format(($data->asap), '0', ',', '.') . "ppm" . "\n\n```Update Terakhir:``` " . $date . "\n";
+				$token = User::where('username', $username)->first()->apitoken;
+
+				$response = notifWa(
+					$token,
+					$reciver,
+					$username,
+					$msg,
+					$isGroup,
+				);
+
+				return response()->json(
+					$response,
+					201,
+					[],
+					JSON_NUMERIC_CHECK
+				);
 			}
 
 			if ($isStatus) {
