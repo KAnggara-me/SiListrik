@@ -85,7 +85,7 @@ class WebhookController extends Controller
 
 			if ($isStatus || $isData) {
 				$response = "";
-				$data = SensorLog::orderBy('updated_at', 'desc')->first();
+				$data = $isData ? SensorLog::orderBy('updated_at', 'desc')->first() : Status::orderBy('updated_at', 'desc')->first();
 				$date = $data->updated_at->format('d/M/y H:i:s');
 				$asap = number_format(($data->asap), '0', ',', '.');
 				$temp = number_format(($data->temperatur), '0', ',', '.');
@@ -103,8 +103,7 @@ class WebhookController extends Controller
 				}
 
 				if ($isStatus) {
-					$msg = Status::orderBy('updated_at', 'desc')->first();
-					$img = "https://silistrik.apiwa.tech/" . $msg->images;
+					$img = "https://silistrik.apiwa.tech/" . $data->images;
 					$response = notifWa(
 						$token,
 						$reciver,
@@ -115,7 +114,7 @@ class WebhookController extends Controller
 						$caption,
 					);
 					if (isset($response["id"])) {
-						$msg->update(['isUsage' => 1]);
+						$data->update(['isUsage' => 1]);
 					}
 				}
 
