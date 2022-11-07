@@ -118,4 +118,27 @@ class HomeController extends Controller
       }
     }
   }
+
+  public function status()
+  {
+    $sensor = SensorLog::orderBy('id', 'desc')->limit(25)->get();
+    $setting = Setting::first();
+    $relay = Relay::first();
+    $last = $sensor->first();
+    foreach ($sensor as $s) {
+      $daya[] = \number_format($s->voltase * $s->arus, '0', '.', '');
+      $suhu[] = $s->temperatur;
+      $date[] = $s->created_at->format('H:i') . ' WIB';
+    }
+    $now = date('D, d M Y | H:i:s');
+    return view('status', [
+      'suhu' => $suhu,
+      'last' => $last,
+      'daya' => $daya,
+      'date' => $date,
+      'now' => $now,
+      'setting' => $setting,
+      'relay' => $relay,
+    ]);
+  }
 }
