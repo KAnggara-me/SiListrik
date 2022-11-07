@@ -128,7 +128,7 @@ if (!function_exists('getImage')) {
   function getImage($time)
   {
     $api = env('PS_API');
-    $url =  "https://silistrik.apiwa.tech";
+    $url =  "https://silistrik.apiwa.tech/status";
     $req = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url={$url}&key={$api}";
 
     $res = file_get_contents($req);
