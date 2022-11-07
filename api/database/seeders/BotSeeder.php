@@ -15,28 +15,34 @@ class BotSeeder extends Seeder
 	public function run()
 	{
 		Bot::create([
+			"trigger" => "start",
+			"device_id" => "admina",
+			"description" => "Welcome to the bot",
+			"response" => "_Selamat Datang di Bot Whatsapp_",
+		]);
+		Bot::create([
+			"trigger" => "assalamualaikum",
+			"device_id" => "admina",
+			"description" => "salam",
+			"response" => "Waalaikumsalam",
+		]);
+		Bot::create([
 			"trigger" => "test",
 			"device_id" => "admina",
-			"description" => "Testing",
-			"response" => "test response",
-		]);
-		Bot::create([
-			"trigger" => "test1",
-			"device_id" => "admina",
-			"description" => "Testing1",
-			"response" => "test response",
-		]);
-		Bot::create([
-			"trigger" => "test2",
-			"device_id" => "admina",
-			"description" => "Testing2",
-			"response" => "test response",
-		]);
-		Bot::create([
-			"trigger" => "test3",
-			"device_id" => "admina",
 			"description" => "Testing3",
-			"response" => "test response",
+			"response" => "test berhasil",
+		]);
+		Bot::create([
+			"trigger" => "halo",
+			"device_id" => "admina",
+			"description" => "Hallo",
+			"response" => "Halo juga",
+		]);
+		Bot::create([
+			"trigger" => "help",
+			"device_id" => "admina",
+			"description" => "Help",
+			"response" => "*List Command* \n\n0. *Status* : Menampilkan Data Sensor \n1. *start* \n2. *assalamualaikum* \n3. *test* \n4. *halo* \n5. *help*",
 		]);
 	}
 }
