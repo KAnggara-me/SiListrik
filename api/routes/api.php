@@ -15,3 +15,5 @@ Route::get('/v1/status/{username}/{token}', [APIController::class, 'userStatus']
 Route::get('/v1/data', [APIController::class, 'index']);
 Route::get('/v1/data/{id}', [APIController::class, 'show']);
 Route::post('/v1/data', [APIController::class, 'store']);
+
+Route::get('/v1/img', [APIController::class, 'test']);

@@ -8,6 +8,7 @@ use App\Models\Setting;
 use App\Models\SensorLog;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class APIController extends Controller
 {
@@ -151,5 +152,33 @@ class APIController extends Controller
       [],
       JSON_NUMERIC_CHECK
     );
+  }
+
+  public function test()
+  {
+    $api = env('PS_API');
+    $url =  "https://silistrik.apiwa.tech/status";
+    $req = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url={$url}&key={$api}";
+
+    $res = file_get_contents($req);
+    $data = json_decode($res, true);
+    $base64_image = $data['lighthouseResult']['audits']['full-page-screenshot']['details']['screenshot']['data'];
+    $base64_image = explode(",", $base64_image);
+    $image = str_replace('data:image/jpeg;base64,', '', $base64_image);
+
+    $img = base64_decode($image[1]);
+    $time = time();
+    $path = "images/" .  $time . '.' . 'jpg';
+    $cek = Storage::put($path, $img);
+
+    if ($cek) {
+      header('Content-Type: image/jpeg');
+      return response()->file($path);
+    }
+
+    return response()->json([
+      'status' => 'error',
+      'message' => 'error'
+    ]);
   }
 }
