@@ -8,7 +8,7 @@
 				</div>
 			</div>
 			<div class="flex flex-wrap">
-				<div class="w-full p-6 md:w-1/2 xl:w-1/3">
+				<div class="w-full p-6 md:w-1/4">
 					<label class="cursor-pointer" for="large-toggle">
 						<input class="peer sr-only" id="large-toggle" type="checkbox" value=""
 							{{ $relay->status == 0 ? 'checked' : '' }}>
@@ -31,7 +31,7 @@
 						</div>
 					</label>
 				</div>
-				<div class="w-full p-6 md:w-1/2 xl:w-1/3">
+				<div class="w-full p-6 md:w-1/4">
 					<div class="rounded-lg border-b-4 border-blue-500 bg-gradient-to-b from-blue-200 to-blue-100 p-5 shadow-xl">
 						<div class="flex flex-row items-center">
 							<div class="flex-shrink pr-4">
@@ -48,7 +48,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="w-full p-6 md:w-1/2 xl:w-1/3">
+				<div class="w-full p-6 md:w-1/4">
 					<div class="rounded-lg border-b-4 border-blue-500 bg-gradient-to-b from-blue-200 to-blue-100 p-5 shadow-xl">
 						<div class="flex flex-row items-center">
 							<div class="flex-shrink pr-4">
@@ -65,7 +65,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="w-full p-6 md:w-1/2 xl:w-1/3">
+				<div class="w-full p-6 md:w-1/4">
 					@php
 						$V = $last->voltase;
 						$I = $last->arus;
