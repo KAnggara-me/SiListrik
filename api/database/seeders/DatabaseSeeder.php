@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
       DeviceLogSeeder::class,
       SettingSeeder::class,
       RelaySeeder::class,
+      StatusSeeder::class,
     ]);
   }
 }
