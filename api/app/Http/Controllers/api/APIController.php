@@ -154,12 +154,32 @@ class APIController extends Controller
     );
   }
 
-  public function relayStatus()
+  public function settingStatus($user)
   {
     $relay = Relay::first();
+    $id = User::where('username', $user)->first();
+    if (!$id) {
+      return response()->json(
+        [
+          "daya" => 900,
+          "tmax" => 35,
+          "asap" => 300,
+          "limit" => 900,
+          "relay" => $relay->status,
+        ],
+        200,
+        [],
+        JSON_NUMERIC_CHECK
+      );
+    }
+    $setting = Setting::where('user_id', $id->id)->first();
     return response()->json(
       [
+        "daya" => $setting->daya,
+        "tmax" => $setting->tmax,
+        "asap" => $setting->asap,
         "relay" => $relay->status,
+        "limit" => $setting->limit,
       ],
       200,
       [],
