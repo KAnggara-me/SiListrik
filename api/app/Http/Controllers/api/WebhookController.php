@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Models\Bot;
 use App\Models\User;
+use App\Models\Relay;
 use App\Models\Status;
 use App\Models\Webhook;
 use App\Models\DeviceLog;
@@ -81,6 +82,11 @@ class WebhookController extends Controller
 				$webhook->phone_number = $payload['sender'];
 				$webhook->message_type = $payload['message_type'];
 				$webhook->save();
+				if (strtolower($payload['text']) == "on") {
+					Relay::where('id', 1)->update(['status' => 1]);
+				} elseif (strtolower($payload['text']) == "off") {
+					Relay::where('id', 1)->update(['status' => 0]);
+				}
 			}
 
 			if ($isStatus || $isData) {
