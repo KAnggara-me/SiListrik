@@ -139,7 +139,7 @@ if (!function_exists('getImage')) {
     $img = base64_decode($image[1]);
     $path = "images/" .  $time . '.' . 'jpg';
     $status = Storage::put($path, $img);
-
+    Storage::put("images/img.jpg", $img);
     return $status;
   }
 }
