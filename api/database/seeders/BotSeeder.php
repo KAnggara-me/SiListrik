@@ -39,10 +39,22 @@ class BotSeeder extends Seeder
 			"response" => "Halo juga",
 		]);
 		Bot::create([
+			"trigger" => "on",
+			"device_id" => "admina",
+			"description" => "Turn on Relay",
+			"response" => "Listrik dinyalakan",
+		]);
+		Bot::create([
+			"trigger" => "off",
+			"device_id" => "admina",
+			"description" => "Turn off Relay",
+			"response" => "Listrik dimatikan",
+		]);
+		Bot::create([
 			"trigger" => "help",
 			"device_id" => "admina",
 			"description" => "Help",
-			"response" => "*List Command* \n\n0. *Status* : Menampilkan Data Sensor \n1. *start* \n2. *assalamualaikum* \n3. *test* \n4. *halo* \n5. *help*",
+			"response" => "*List Command* \n\n0. *Status* : Menampilkan Data Sensor \n1. *start* \n2. *assalamualaikum* \n3. *test* \n4. *halo* \n5. *On/Off*  : Turn On/Off Relay\n6. *help*",
 		]);
 	}
 }
