@@ -76,7 +76,7 @@ class WebhookController extends Controller
 				$webhook->type = $type;
 				$webhook->status = "success";
 				$webhook->webhook_msg = $type;
-				$webhook->message = $payload['text'];
+				$webhook->message = strtolower($payload['text']);
 				$webhook->caption = $payload['caption'];
 				$webhook->device_id = $username;
 				$webhook->phone_number = $payload['sender'];
