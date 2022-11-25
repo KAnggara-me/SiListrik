@@ -154,6 +154,19 @@ class APIController extends Controller
     );
   }
 
+  public function relayStatus()
+  {
+    $relay = Relay::first();
+    return response()->json(
+      [
+        "relay" => $relay->status,
+      ],
+      200,
+      [],
+      JSON_NUMERIC_CHECK
+    );
+  }
+
   public function test()
   {
     $api = env('PS_API');

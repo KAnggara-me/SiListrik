@@ -11,6 +11,9 @@ Route::post('/v1/webhooks-debug', [WebhookController::class, 'debug']);
 // User Status
 Route::get('/v1/status/{username}/{token}', [APIController::class, 'userStatus']);
 
+// Get relay status
+Route::get('/v1/relay', [APIController::class, 'relayStatus']);
+
 //post Data to Sensor
 Route::get('/v1/data', [APIController::class, 'index']);
 Route::get('/v1/data/{id}', [APIController::class, 'show']);
