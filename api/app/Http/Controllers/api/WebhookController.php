@@ -69,7 +69,7 @@ class WebhookController extends Controller
 			if ($isTriggred || $isStatus || $isData) {
 				$webhook = new Webhook();
 				if (env('APP_ENV') == 'local') {
-					$webhook->id = tokenGen();
+					$webhook->id = tokenGen(32);
 				} else {
 					$webhook->id = $payload['id'];
 				}
