@@ -43,14 +43,39 @@ function pushData(array $params)
   throw new Exception($response, $statusCode);
 }
 
-try {
+function flame()
+{
+  $apiData = [];
+  for ($i = 0; $i < 100; $i++) {
+    array_push($apiData, 0);
+  }
+  array_push($apiData, 3);
+  return $apiData[rand(0, count($apiData) - 1)];
+}
 
+function ampere()
+{
+  $min = 50;
+  $max = 380;
+  $hour = date('H') + 7;
+  if ($hour > 18 || $hour < 6) {
+    $min = 150;
+    $max = 380;
+  } else {
+    $min = 0;
+    $max = 200;
+  }
+  $d = rand($min, $max) / 100;
+  return $d;
+}
+
+try {
   $value = [
-    "api" => 0,
-    "arus" => rand(1, 360) / 100,
-    "asap" => rand(200, 250),
-    "voltase" => rand(215, 225),
-    "temperatur" => rand(24, 30),
+    "api" => flame(),
+    "arus" => ampere(),
+    "asap" => rand(200, 310),
+    "voltase" => rand(219, 222),
+    "temperatur" => rand(250, 315) / 10,
     "kelembaban" => rand(35, 80),
     "token" => "KitKat",
     "username" => "admina",
