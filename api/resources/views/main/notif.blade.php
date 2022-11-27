@@ -37,26 +37,26 @@
 										{{ number_format($s->voltase) . ' V' }}</td>
 									<td class="{{ $s->arus > 4 ? 'bg-red-300' : 'bg-gray-100 ' }} border-r border-gray-200 p-2">
 										{{ number_format($s->arus, $s->arus > 1 ? '1' : '2', '.', ',') . ' A' }}</td>
-									<td class="{{ $P > 880 ? 'bg-red-300' : 'bg-gray-100 ' }} border-r border-gray-200 p-2">
+									<td class="{{ $P > $settings->limit ? 'bg-red-300' : 'bg-gray-100 ' }} border-r border-gray-200 p-2">
 										{{ number_format($P, '0', '.', ',') . ' VA' }}</td>
-									<td class="{{ $s->temperatur > 50 ? 'bg-red-300' : 'bg-gray-100 ' }} border-r border-gray-200 p-2">
+									<td class="{{ $s->temperatur > $settings->tmax ? 'bg-red-300' : 'bg-gray-100 ' }} border-r border-gray-200 p-2">
 										{{ number_format($s->temperatur) }} C&deg;</td>
 									<td class="{{ $s->api > 0 ? 'bg-red-300' : 'bg-gray-100 ' }} border-r border-gray-200 p-2">
 										{{ $s->api }}</td>
-									<td class="{{ $s->asap > 300 ? 'bg-red-300' : 'bg-gray-100 ' }} border-r border-gray-200 p-2">
+									<td class="{{ $s->asap > $settings->asap ? 'bg-red-300' : 'bg-gray-100 ' }} border-r border-gray-200 p-2">
 										{{ number_format($s->asap) }}</td>
 									@php
-										if ($s->temperatur > 50 && $s->asap > 300 && $s->api > 0) {
+										if ($s->temperatur > $settings->tmax && $s->asap > $settings->asap && $s->api > 0) {
 										    echo '<td class="border-r border-gray-200 bg-red-400 p-2">Kebakaran Terdeteksi</td>';
-										} elseif ($P > 900) {
+										} elseif ($P > $settings->limit) {
 										    echo '<td class="border-r border-gray-200 bg-amber-400 p-2">Penggunaan Listrik Tinggi</td>';
-										} elseif ($s->temperatur > 50) {
+										} elseif ($s->temperatur > $settings->tmax) {
 										    echo '<td class="border-r border-gray-200 bg-orange-400 p-2">Temperatur Tinggi</td>';
 										} elseif ($s->voltase > 239) {
 										    echo '<td class="border-r border-gray-200 bg-pink-400 p-2">Over Voltage</td>';
 										} elseif ($s->api > 0) {
 										    echo '<td class="border-r border-gray-200 bg-rose-400 p-2">Api Terdeteksi</td>';
-										} elseif ($s->asap > 300) {
+										} elseif ($s->asap > $settings->asap) {
 										    echo '<td class="border-r border-gray-200 bg-slate-400 p-2">Asap Terdeteksi</td>';
 										} else {
 										    echo '<td class="border-r border-gray-200 bg-green-400 p-2">Aman</td>';
@@ -67,6 +67,7 @@
 
 						</tbody>
 					</table>
+
 				</div>
 			</div>
 		</div>

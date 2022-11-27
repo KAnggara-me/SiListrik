@@ -48,21 +48,27 @@ class HomeController extends Controller
 
   public function notif()
   {
+    $id = auth()->user()->id;
     $sensor = SensorLog::orderBy('id', 'desc')->limit(250)->get();
+    $setting = Setting::where('user_id', $id)->first();
     return view('main.notif', [
       'title' => 'Notification',
       'active' => 'notif',
       'sensors' => $sensor,
+      'settings' => $setting,
     ]);
   }
 
   public function bot()
   {
+    $id = auth()->user()->id;
     $sensor = SensorLog::orderBy('id', 'desc')->limit(250)->get();
+    $setting = Setting::where('user_id', $id)->first();
     return view('main.notif', [
       'title' => 'Bot Setting',
       'active' => 'bot',
       'sensors' => $sensor,
+      'settings' => $setting,
     ]);
   }
 
