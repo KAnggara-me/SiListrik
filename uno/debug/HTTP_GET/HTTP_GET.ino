@@ -11,6 +11,7 @@ const char* password = WIFI_PASS;
 const String serverGet = "https://silistrik.apiwa.tech/api/v1/setting/";
 
 const int LED = 2;
+const int relay = 14;
 unsigned long prevMilis = 0;
 unsigned int getTime = 1;
 int relayState = 0;
@@ -18,6 +19,7 @@ int relayState = 0;
 void setup() {
   Serial.begin(115200);
   pinMode(LED, OUTPUT);
+  pinMode(relay, OUTPUT);
   delay(10);
 
   Serial.println();
@@ -67,8 +69,10 @@ void loop() {
   // check relay state
   if (relayState == 1) {
     digitalWrite(LED, HIGH);
+    digitalWrite(relay, HIGH);
   } else {
     digitalWrite(LED, LOW);
+    digitalWrite(relay, LOW);
   }
 
   Serial.println(relayState);
