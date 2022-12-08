@@ -1,7 +1,18 @@
 #include <DHT.h>
+#include <WiFi.h>
+#include <Arduino.h>
+#include <HTTPClient.h>
+#include <ArduinoJson.h>
 #include <PZEM004Tv30.h>
 
+#include "config.h"
+
 #define DHTTYPE DHT11  // DHT 11
+
+const char* ssid = WIFI_SSID;
+const char* password = WIFI_PASS;
+
+const String serverGet = "https://silistrik.apiwa.tech/api/v1/setting/";
 
 DHT dht(5, DHTTYPE);
 PZEM004Tv30 pzem(Serial2, 16, 17);
@@ -10,6 +21,7 @@ PZEM004Tv30 pzem(Serial2, 16, 17);
 const int led = 2;
 const int buzz = 0;
 const int mq2 = 34;
+const int dhtPin = 5;
 const int flameOne = 33;
 const int flameTwo = 25;
 const int flameThree = 26;
@@ -19,23 +31,51 @@ const int relayOne = 14;
 const int relayTwo = 13;
 
 // Deklarasi Variabel
-int flame;
-
 float smoke;
 float current;
 float voltage;
 float humidity;
 float temperature;
 
+int flame;
+int relayState = 0;
+
+// Milis config
+unsigned int getTime = 1;
+unsigned long prevMilis = 0;
+
 void setup() {
   Serial.begin(115200);
-  pinMode(5, INPUT);    // DHT as Input
-  pinMode(mq2, INPUT);  // MQ2 as Input
+  configGPIO();
+  wifiConnect();
+  dht.begin();
+}
+
+void wifiConnect() {
+  Serial.print("\n\nConnecting to ");
+  Serial.println(ssid);
+
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("\nWiFi connected");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+}
+
+void configGPIO() {
+  pinMode(mq2, INPUT);     // MQ2 as Input
+  pinMode(dhtPin, INPUT);  // DHT as Input
   pinMode(flameOne, INPUT);
   pinMode(flameTwo, INPUT);
   pinMode(flameThree, INPUT);
   pinMode(flameFour, INPUT);
   pinMode(flameFive, INPUT);
+
   pinMode(led, OUTPUT);
   pinMode(buzz, OUTPUT);
   pinMode(relayTwo, OUTPUT);
@@ -45,7 +85,6 @@ void setup() {
   digitalWrite(buzz, LOW);
   digitalWrite(relayTwo, HIGH);
   digitalWrite(relayOne, HIGH);
-  dht.begin();
 }
 
 float getCurrent() {
@@ -111,7 +150,26 @@ int getFlame() {
   return flemeStateOne + flemeStateTwo + flemeStateThree + flemeStateFour + flemeStateFive;
 }
 
+int getData() {
+  String res;
+  HTTPClient http;
+  http.begin(serverGet + AdminId);
+  int httpCode = http.GET();
+
+  if (httpCode == 200) {
+    res = http.getString();
+    StaticJsonDocument<1024> json;
+    deserializeJson(json, res);
+    int relay = json["relay"];
+    return relay;
+  }
+
+  return 0;
+}
+
 void loop() {
+  long milis = millis() / 1000;
+
   flame = getFlame();              // Read Flame
   smoke = getSmoke();              // Read Smoke
   voltage = getVoltage();          // read Voltage
@@ -119,15 +177,29 @@ void loop() {
   humidity = getHumidity();        // Read Humidity
   temperature = getTemperature();  // Read Temperature
 
-  if (flame > 0) {
+  // run every 3 s
+  if (milis - prevMilis >= getTime) {
+    prevMilis = milis;
+    relayState = getData();
+  }
+
+  // check relay state
+  if (relayState == 1) {
     digitalWrite(led, HIGH);
-    digitalWrite(buzz, HIGH);
-    digitalWrite(relayOne, LOW);
+    digitalWrite(relayOne, HIGH);
   } else {
     digitalWrite(led, LOW);
-    digitalWrite(buzz, LOW);
-    digitalWrite(relayOne, HIGH);
+    digitalWrite(relayOne, LOW);
   }
+
+  if (flame > 0) {
+    digitalWrite(buzz, HIGH);
+  } else {
+    digitalWrite(buzz, LOW);
+  }
+
+  Serial.print("Relay:");
+  Serial.println(relayState);
 
   Serial.print("Flame:");
   Serial.println(flame);
@@ -136,14 +208,13 @@ void loop() {
   Serial.println(smoke);
 
   Serial.print("Temperatur:");
-  Serial.print(humidity, 2);
-  Serial.print(",");
+  Serial.print(humidity);
   Serial.print("Humidity:");
-  Serial.println(temperature, 2);
+  Serial.println(temperature);
 
   Serial.print("Volt:");
   Serial.println(voltage);
   Serial.print("Ampere:");
   Serial.println(current);
-  delay(1000);
+  delay(500);
 }
