@@ -53,7 +53,7 @@ float getTemperature() {
 }
 
 float getHumidity() {
-  float h = dht.readHumidity();
+  float h = dht.readHumidity();  // read humidity from sensor
   if (isnan(h)) {
     h = random(2500, 2800) / 100.0;
   }
