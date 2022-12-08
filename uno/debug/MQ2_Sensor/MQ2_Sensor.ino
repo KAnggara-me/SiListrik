@@ -8,14 +8,17 @@ void setup() {
 }
 
 void loop() {
-  float data = 0;
+  float data = 5;
 
-  for (int i = 0; i < 20; i++) {
-    data += analogRead(mq2);
-    delay(25);
-  }
+  // for (int i = 0; i < 20; i++) {
+  //   delay(25);
+  // }
+  data = analogRead(mq2);
 
-  asap = data / 10;
-  Serial.println(data / 10);
+  // asap = data / 10;
+  // Serial.println("Limit:300");
+  // Serial.println("Min:0");
+  Serial.print("Smoke:");
+  Serial.println(data);
   delay(500);
 }
