@@ -35,18 +35,26 @@ const int relayOne = 14;
 const int relayTwo = 13;
 
 // Deklarasi Variabel
-float smoke;
-float current;
-float voltage;
-float humidity;
-float temperature;
+float smoke = 200;
+float current = 0;
+float voltage = 220;
+float humidity = 75;
+float temperature = 20;
 
-int flame;
+int flame = 0;
+int power = 200;
 int relayState = 0;
+
+// Setting data
+int powerMax = 800;
+int smokeMax = 300;
+int temperatureMax = 30;
 
 // Milis config
 unsigned int getTime = 1;
-unsigned long prevMilis = 0;
+unsigned int postTime = 30;
+unsigned long getMilis = 0;
+unsigned long postMilis = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -56,7 +64,7 @@ void setup() {
 }
 
 void wifiConnect() {
-  Serial.print("\n\nConnecting to ");
+  Serial.print(F("\n\nConnecting to "));
   Serial.println(ssid);
 
   WiFi.begin(ssid, password);
@@ -66,8 +74,8 @@ void wifiConnect() {
     Serial.print(".");
   }
 
-  Serial.println("\nWiFi connected");
-  Serial.print("IP address: ");
+  Serial.println(F("\nWiFi connected"));
+  Serial.print(F("IP address: "));
   Serial.println(WiFi.localIP());
 }
 
@@ -97,7 +105,7 @@ float getCurrent() {
 
   // Check if the data is valid
   if (isnan(ampere)) {
-    Serial.println("Error reading current");
+    Serial.println(F("Error reading current"));
     return current;
   } else {
     return ampere;
@@ -110,7 +118,7 @@ float getVoltage() {
 
   // Check if the data is valid
   if (isnan(volt)) {
-    Serial.println("Error reading Voltage");
+    Serial.println(F("Error reading Voltage"));
     return voltage;
   } else {
     return volt;
@@ -119,17 +127,21 @@ float getVoltage() {
 
 float getTemperature() {
   float t = dht.readTemperature();  // Read temperature as Celsius (the default)
+
   if (isnan(t)) {
-    t = random(6500, 7200) / 100.0;
+    t = random(2500, 2800) / 100.0;
   }
+
   return t;
 }
 
 float getHumidity() {
   float h = dht.readHumidity();  // read humidity from sensor
+
   if (isnan(h)) {
-    h = random(2500, 2800) / 100.0;
+    h = random(6500, 7200) / 100.0;
   }
+
   return h;
 }
 
@@ -165,13 +177,81 @@ int getData() {
     StaticJsonDocument<1024> json;
     deserializeJson(json, res);
     int relay = json["relay"];
+    powerMax = json["limit"];
+    smokeMax = json["asap"];
+    temperatureMax = json["tmax"];
     return relay;
   }
 
   return 0;
 }
 
+void postData() {
+  Serial.println(F("Post Data"));
+  String param;
+  String res;
+  HTTPClient http;
+
+  StaticJsonDocument<200> buff;
+
+  buff["api"] = flame;
+  buff["asap"] = smoke;
+  buff["token"] = token;
+  buff["arus"] = current;
+  buff["username"] = admin;
+  buff["voltase"] = voltage;
+  buff["kelembaban"] = humidity;
+  buff["temperatur"] = temperature;
+
+  serializeJson(buff, param);
+  http.begin(serverPost);
+  http.addHeader("Content-Type", "application/json");
+  int statusCode = http.POST(param);
+  res = http.getString();
+
+  StaticJsonDocument<1024> json;
+  deserializeJson(json, res);
+
+  Serial.print(statusCode + " ");
+  Serial.println(res);
+}
+
+
+void checkData() {
+  power = current * voltage;
+  if ((flame > 0) || (power > powerMax) || (temperature > temperatureMax) || (smoke > smokeMax)) {
+    digitalWrite(buzz, HIGH);
+    postData();
+  } else {
+    digitalWrite(buzz, LOW);
+  }
+}
+
+void printData() {
+  Serial.print(F("Relay:"));
+  Serial.println(relayState);
+
+  Serial.print(F("Flame:"));
+  Serial.println(flame);
+
+  Serial.print(F("Smoke:"));
+  Serial.println(smoke);
+
+  Serial.print(F("Temperatur:"));
+  Serial.println(temperature);
+
+  Serial.print(F("Humidity:"));
+  Serial.println(humidity);
+
+  Serial.print(F("Volt:"));
+  Serial.println(voltage);
+
+  Serial.print(F("Ampere:"));
+  Serial.println(current);
+}
+
 void loop() {
+  Serial.println("=======================");
   long milis = millis() / 1000;
 
   flame = getFlame();              // Read Flame
@@ -181,44 +261,28 @@ void loop() {
   humidity = getHumidity();        // Read Humidity
   temperature = getTemperature();  // Read Temperature
 
-  // run every 3 s
-  if (milis - prevMilis >= getTime) {
-    prevMilis = milis;
+  // Get data run every 3 s
+  if (milis - getMilis >= getTime) {
+    getMilis = milis;
     relayState = getData();
+
+    // check relay state
+    if (relayState == 1) {
+      digitalWrite(led, HIGH);
+      digitalWrite(relayOne, HIGH);
+    } else {
+      digitalWrite(led, LOW);
+      digitalWrite(relayOne, LOW);
+    }
   }
 
-  // check relay state
-  if (relayState == 1) {
-    digitalWrite(led, HIGH);
-    digitalWrite(relayOne, HIGH);
-  } else {
-    digitalWrite(led, LOW);
-    digitalWrite(relayOne, LOW);
+  // run every 30 s
+  if (milis - postMilis >= postTime) {
+    postMilis = milis;
+    postData();
   }
 
-  if (flame > 0) {
-    digitalWrite(buzz, HIGH);
-  } else {
-    digitalWrite(buzz, LOW);
-  }
-
-  Serial.print("Relay:");
-  Serial.println(relayState);
-
-  Serial.print("Flame:");
-  Serial.println(flame);
-
-  Serial.print("Smoke:");
-  Serial.println(smoke);
-
-  Serial.print("Temperatur:");
-  Serial.print(humidity);
-  Serial.print("Humidity:");
-  Serial.println(temperature);
-
-  Serial.print("Volt:");
-  Serial.println(voltage);
-  Serial.print("Ampere:");
-  Serial.println(current);
-  delay(500);
+  checkData();
+  printData();
+  delay(1000);
 }
