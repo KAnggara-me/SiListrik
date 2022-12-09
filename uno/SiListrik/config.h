@@ -4,3 +4,4 @@
 #define WIFI_PASS "duaakar3"      // WiFi Pass
 /**********************************************************************************/
 #define AdminId "admina"
+#define TokenId "KitKat"

@@ -12,6 +12,10 @@
 const char* ssid = WIFI_SSID;
 const char* password = WIFI_PASS;
 
+const String admin = AdminId;
+const String token = TokenId;
+
+const String serverPost = "https://silistrik.apiwa.tech/api/v1/data";
 const String serverGet = "https://silistrik.apiwa.tech/api/v1/setting/";
 
 DHT dht(5, DHTTYPE);
