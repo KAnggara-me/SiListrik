@@ -1,7 +1,7 @@
 /**********************************************************************************/
 //WiFi Section
-#define WIFI_SSID "KAnggara75v7"  // WiFi Name
-#define WIFI_PASS "duaakar3"      // WiFi Pass
+#define WIFI_SSID "Kos_oren"       // WiFi Name
+#define WIFI_PASS "masihyanglama"  // WiFi Pass
 /**********************************************************************************/
 #define AdminId "admina"
 #define TokenId "KitKat"
